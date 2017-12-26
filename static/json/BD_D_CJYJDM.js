@@ -1,0 +1,13 @@
+[
+{"id":"01","text":"本人提供","py":"BRTG","wb":"SWRW"},
+{"id":"02","text":"亲属证明","py":"QSZM","wb":"UNYJ"},
+{"id":"03","text":"邻居证明","py":"LJZM","wb":"WNYJ"},
+{"id":"04","text":"物管证明","py":"WGZM","wb":"TTYJ"},
+{"id":"05","text":"单位（社区）证明","py":"DW（SQ）ZM","wb":"UW（PA）YJ"},
+{"id":"06","text":"pc上报","py":"pcSB","wb":"pcHR"},
+{"id":"07","text":"app上报","py":"appSB","wb":"appHR"},
+{"id":"08","text":"短信上报","py":"DXSB","wb":"TWHR"},
+{"id":"09","text":"微信上报","py":"WXSB","wb":"TWHR"},
+{"id":"10","text":"书面上报","py":"SMSB","wb":"NDHR"},
+{"id":"11","text":"传真上报","py":"CZSB","wb":"WFHR"}
+]
