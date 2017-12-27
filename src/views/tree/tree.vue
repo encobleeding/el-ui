@@ -36,6 +36,7 @@
     @check-change="handleNodeCheckClick"
     v-if="seen"
     default-expand-all
+    :render-content="renderContent"
     :expand-on-click-node="false">
   </el-tree>
   </section>
@@ -58,28 +59,23 @@
       }
     },
     methods: {
+      diguidata(data2) {
+        this.data2.forEach((value, index, array) => {
+          value.newval = value.id + ' | ' + value.text
+          if(value.children !== '' && value.children !==undefined) {
+            //this.diguidata(value.children)
+          }
+          else{
+            return false;
+          }
+        });
+        return data2
+      },
       convertData2() {
         axios.get('static/json/GA_D_XSAJLBDM.js').then((res) => {
           let datas = res.data
           this.data2 = datas
-          this.data2.forEach((value, index, array) => {
-            value.newval = value.id + ' | ' + value.text
-            if(value.children !== '' && value.children !==undefined) {
-              value.children.forEach((value, index, array) => {
-                value.newval = value.id + ' | ' + value.text
-                if(value.children !== '' && value.children !==undefined) {
-                  value.children.forEach((value, index, array) => {
-                    value.newval = value.id + ' | ' + value.text
-                    if(value.children !== '' && value.children !==undefined) {
-                      value.children.forEach((value, index, array) => {
-                        value.newval = value.id + ' | ' + value.text
-                      });
-                    }
-                  });
-                }
-              });
-            }
-          });
+          //this.diguidata(this.data2)
         })
       },
       dataHandle(data, node) {},
@@ -173,6 +169,14 @@
       },
       keyupEvent: function () {
         alert('你按了上键！');
+      },
+      renderContent(h, { node, data, store }) {
+        return (
+          <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+            <span>
+              <span>{data.id} &#166; {data.text}</span>
+            </span>
+          </span>);
       }
     },
     data() {
