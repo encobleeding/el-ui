@@ -1,10 +1,25 @@
 <template>
   <section class="form-section">
-  <el-select v-model="value5" multiple @remove-tag="removeTag" popper-class="hidden"  @visible-change="showtree"></el-select>
+  <el-select
+    v-model="value5"
+    multiple
+    @remove-tag="removeTag"
+    popper-class="hidden"
+    @visible-change="showtree"
+    default-first-option
+    placeholder="请选择以下条目"
+    class="inputWidth">
+  </el-select>
 
-  <el-input v-model="result" @focus="showtree"></el-input>
+  <!-- <el-input v-model="result" @focus="showtree"></el-input> -->
 
-  <el-input placeholder="输入ID,汉字，拼音字母，五笔字母进行过滤" v-model="filterText" v-if="seen" class="newinput"></el-input>
+  <el-input
+    placeholder="输入ID,汉字，拼音字母，五笔字母可以查询"
+    v-model="filterText"
+    v-if="seen"
+    @keyup.up.native="keyupEvent()"
+    class="newinput">
+  </el-input>
 
   <el-tree
     class="filter-tree"
@@ -12,6 +27,7 @@
     node-key="id"
     show-checkbox
     :check-strictly="false"
+    render-after-expand
     highlight-current
     :props="defaultProps"
     :filter-node-method="filterNode"
@@ -26,11 +42,14 @@
 </template>
 
 <style>
-.newinput{margin-top:20px; margin-bottom:-1px;border-left-bottom-radius:0;border-right-bottom-radius:0;}
+.inputWidth{width:500px;}
+.el-tree{max-height: 500px; overflow-y: auto;}
+.newinput{margin-top:20px; margin-bottom:-1px;}
 .hidden,.el-input__icon.el-icon-caret-top{display:none;}
 </style>
 <script type="text/jsx">
   import axios from 'axios'
+  import _ from 'lodash'
   let id = 1000;
   export default {
     watch: {
@@ -43,8 +62,24 @@
         axios.get('static/json/GA_D_XSAJLBDM.js').then((res) => {
           let datas = res.data
           this.data2 = datas
-          this.data2.forEach((index, value, array) => {});
-          // 第一个参数是遍历的数组内容，第二个参数是对应的数组索引，第三个参数是数组本身
+          this.data2.forEach((value, index, array) => {
+            value.newval = value.id + ' | ' + value.text
+            if(value.children !== '' && value.children !==undefined) {
+              value.children.forEach((value, index, array) => {
+                value.newval = value.id + ' | ' + value.text
+                if(value.children !== '' && value.children !==undefined) {
+                  value.children.forEach((value, index, array) => {
+                    value.newval = value.id + ' | ' + value.text
+                    if(value.children !== '' && value.children !==undefined) {
+                      value.children.forEach((value, index, array) => {
+                        value.newval = value.id + ' | ' + value.text
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
         })
       },
       dataHandle(data, node) {},
@@ -136,6 +171,9 @@
           }
         }
       },
+      keyupEvent: function () {
+        alert('你按了上键！');
+      }
     },
     data() {
       return {
@@ -143,7 +181,7 @@
         data2: [],
         defaultProps: {
           children: 'children',
-          label: 'text'
+          label: 'newval'
         },
         result: '',
         trueresult: '',

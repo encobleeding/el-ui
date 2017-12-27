@@ -21,6 +21,7 @@ import '../static/UE/ueditor.config.js'
 import '../static/UE/ueditor.all.min.js'
 import '../static/UE/lang/zh-cn/zh-cn.js'
 import '../static/UE/ueditor.parse.min.js'
+import _ from 'lodash'
 
 Mock.mockData();
 Vue.use(VueRouter);// 安装路由功能
@@ -28,6 +29,7 @@ Vue.use(VueRouter);// 安装路由功能
 Vue.use(VueRouter);
 Vue.prototype.$http = axios;
 Vue.use(ElementUI);
+Vue.prototype._ = _
 
 // 后端对比cookies判断是否登录，凡接口response的header带有x-auth-token的即未登录，跳转首页。
 // Vue.http.interceptors.push((request, next) => {
