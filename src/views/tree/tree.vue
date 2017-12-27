@@ -25,6 +25,9 @@
     class="filter-tree"
     :data="data2"
     node-key="id"
+    :default-expanded-keys="['01000500']"
+    :default-checked-keys="['01000500']"
+    accordion
     show-checkbox
     :check-strictly="false"
     render-after-expand
@@ -35,7 +38,6 @@
     @node-click="handleNodeoneClick"
     @check-change="handleNodeCheckClick"
     v-if="seen"
-    default-expand-all
     :render-content="renderContent"
     :expand-on-click-node="false">
   </el-tree>
@@ -75,6 +77,11 @@
         axios.get('static/json/GA_D_XSAJLBDM.js').then((res) => {
           let datas = res.data
           this.data2 = datas
+          this.data2.forEach((value, index, array) => {
+            if(value.id = "ROOT"){
+              value.disabled = true //禁用方法
+            } 
+          })
           //this.diguidata(this.data2)
         })
       },
@@ -177,6 +184,35 @@
               <span>{data.id} &#166; {data.text}</span>
             </span>
           </span>);
+      },
+      idtoObj(){
+        axios.get('static/json/GA_D_XSAJLBDM.js').then((res) => {
+          let data2=res.data
+          data2.forEach((value, index, array) => {
+            for(let j = 0; j<= this.getid.length; j++) {
+              if(value.id == this.getid[j]) {
+                this.value5id.push({'txt':value.text, 'id':this.getid[j]})
+                this.value5.push(value.text)
+              }
+            }
+            if(value.children !== '' && value.children !==undefined) {
+              this.ddget(value.children)
+            }
+          });
+        });
+      },
+      ddget(newdata2) {
+        newdata2.forEach((value, index, array) => {
+        for(let j = 0; j<= this.getid.length; j++) {
+            if(value.id == this.getid[j]) {
+              this.value5id.push({'txt':value.text, 'id':this.getid[j]})
+              this.value5.push(value.text)
+            }
+          }
+          if(value.children !== '' && value.children !==undefined) {
+            this.ddget(value.children)
+          }
+        });
       }
     },
     data() {
@@ -185,17 +221,20 @@
         data2: [],
         defaultProps: {
           children: 'children',
-          label: 'newval'
+          label: 'newval',
+          isLeaf: 'leaf'
         },
         result: '',
         trueresult: '',
         seen: false,
         value5: [],
-        value5id: []
+        value5id: [],
+        getid: ['01000500']
       };
     },
     created() {
       this.convertData2()
+      this.idtoObj()
     }
   };
 </script>
