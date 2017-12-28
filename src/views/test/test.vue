@@ -7,7 +7,7 @@
   export default {
     data () {
       return {
-        fiterID: {"id": "01000000"}
+        fiterID: {"id": "0100"}
       };
     },
     components: {
@@ -18,7 +18,6 @@
     created: function () {
     },
     beforeMount: function () {
-
     },
     mounted: function () {
     },
