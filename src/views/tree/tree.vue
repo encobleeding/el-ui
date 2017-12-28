@@ -255,6 +255,10 @@
         });
       }
     },
+    props: {
+      user: {
+      }
+    },
     data() {
       return {
         filterText: '',
