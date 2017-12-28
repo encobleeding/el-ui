@@ -168,8 +168,12 @@
         let nowstate = node.checked
         if (nowstate) {
           node.checked = false
+          node.indeterminate = false
+          this.justone = "只选我"
         } else {
           node.checked = true
+          node.indeterminate = false
+          this.justone = "取消勾选"
         }
         node.childNodes.forEach((value, index, array) => {
           if (value.checked){
@@ -213,7 +217,7 @@
                 <span>{data.id} &#166; {data.text}</span>
               </span>
               <span style="width:10%; text-align:right;">
-                <el-button type="text" on-click={ () => this.justme(node, data) }>只选我</el-button>
+                <el-button type="text" on-click={ () => this.justme(node, data) }>{this.justone}</el-button>
               </span>
             </span>);
         }
@@ -273,6 +277,7 @@
           label: 'newval',
           isLeaf: 'leaf'
         },
+        justone: '只选我',
         result: '',
         trueresult: '',
         seen: false,
