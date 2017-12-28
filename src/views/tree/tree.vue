@@ -189,7 +189,7 @@
       keyupEvent: function () {
         this.open("tips","你按了上键！")
       },
-      renderContent(h, { node, data, store }) {
+      renderContent(h, { node, data, store, fitter}) {
         if(data.disabled){
           return (
             <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
@@ -253,10 +253,15 @@
           title: title,
           message: h('i', { style: 'color: teal'}, content)
         });
+      },
+      fitterID(data) {
+        console.log(data)
+        if (!data) return true;
+        return this.data2.indexOf(data) !== -1
       }
     },
     props: {
-      user: {
+      fiterID: {
       }
     },
     data() {
@@ -279,6 +284,7 @@
     created() {
       this.convertData2()
       this.idtoObj()
+      this.fitterID(this.fiterID.id)
     }
   };
 </script>

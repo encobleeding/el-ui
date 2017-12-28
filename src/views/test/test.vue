@@ -1,5 +1,5 @@
 <template>
-  <v-tree :user="user"></v-tree>
+  <v-tree :fiterID="fiterID"></v-tree>
 </template>
 
 <script>
@@ -7,11 +7,28 @@
   export default {
     data () {
       return {
-        user: {"id": "1001"}
+        fiterID: {"id": "01000000"}
       };
     },
     components: {
       'v-tree': newtree
+    },
+    beforeCreate: function () {
+    },
+    created: function () {
+    },
+    beforeMount: function () {
+
+    },
+    mounted: function () {
+    },
+    beforeUpdate: function () {
+    },
+    updated: function () {
+    },
+    beforeDestroy: function () {
+    },
+    destroyed: function () {
     }
   };
 </script>
