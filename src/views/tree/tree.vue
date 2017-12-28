@@ -35,7 +35,7 @@
     :filter-node-method="filterNode"
     ref="tree"
     @check-change="handleNodeCheckClick"
-    v-if="seen"
+    v-show="seen"
     :render-content="renderContent">
   </el-tree>
   </section>
@@ -169,11 +169,11 @@
         if (nowstate) {
           node.checked = false
           node.indeterminate = false
-          this.justone = "只选我"
+          event.target.textContent = '勾选当前'
         } else {
           node.checked = true
           node.indeterminate = false
-          this.justone = "取消勾选"
+          event.target.textContent = '取消勾选'
         }
         node.childNodes.forEach((value, index, array) => {
           if (value.checked){
@@ -194,6 +194,11 @@
         this.open("tips","你按了上键！")
       },
       renderContent(h, { node, data, store, fitter}) {
+        fitter = this.fiterID.id;
+        let patt1 = RegExp("^(?=(" + fitter + "))");
+        if(patt1.test(data.id)) {
+          node.visible = false
+        }
         if(data.disabled){
           return (
             <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
@@ -217,7 +222,7 @@
                 <span>{data.id} &#166; {data.text}</span>
               </span>
               <span style="width:10%; text-align:right;">
-                <el-button type="text" on-click={ () => this.justme(node, data) }>{this.justone}</el-button>
+                <el-button type="text" on-click={ () => this.justme(node, data) }>勾选当前</el-button>
               </span>
             </span>);
         }
@@ -257,11 +262,6 @@
           title: title,
           message: h('i', { style: 'color: teal'}, content)
         });
-      },
-      fitterID(data) {
-        console.log(data)
-        if (!data) return true;
-        return this.data2.indexOf(data) !== -1
       }
     },
     props: {
@@ -277,7 +277,6 @@
           label: 'newval',
           isLeaf: 'leaf'
         },
-        justone: '只选我',
         result: '',
         trueresult: '',
         seen: false,
@@ -289,7 +288,6 @@
     created() {
       this.convertData2()
       this.idtoObj()
-      this.fitterID(this.fiterID.id)
     }
   };
 </script>
