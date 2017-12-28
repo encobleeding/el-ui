@@ -1,4 +1,4 @@
-<template>
+<template id="treenews">
   <section class="form-section">
   <el-select
     v-model="value5"
@@ -25,9 +25,8 @@
     class="filter-tree"
     :data="data2"
     node-key="id"
-    :default-expanded-keys="['01000500']"
-    :default-checked-keys="['01000500']"
-    accordion
+    :default-expanded-keys="getid"
+    :default-checked-keys="getid"
     show-checkbox
     :check-strictly="false"
     render-after-expand
@@ -35,11 +34,9 @@
     :props="defaultProps"
     :filter-node-method="filterNode"
     ref="tree"
-    @node-click="handleNodeoneClick"
     @check-change="handleNodeCheckClick"
     v-if="seen"
-    :render-content="renderContent"
-    :expand-on-click-node="false">
+    :render-content="renderContent">
   </el-tree>
   </section>
 </template>
@@ -82,10 +79,8 @@
               value.disabled = true //禁用方法
             } 
           })
-          //this.diguidata(this.data2)
         })
       },
-      dataHandle(data, node) {},
       filterNode(value, data) {
         if (!value) return true;
         let ssjg = []
@@ -165,6 +160,23 @@
           });
         }
       },
+      justme(node, data) {
+        event.cancelBubble = true;
+        const parent = node.parent;
+        const children = parent.data.children || parent.data;
+        const index = children.findIndex(d => d.id === data.id);
+        let nowstate = node.checked
+        if (nowstate) {
+          node.checked = false
+        } else {
+          node.checked = true
+        }
+        node.childNodes.forEach((value, index, array) => {
+          if (value.checked){
+            value.checked = false
+          }
+        });
+      },
       removeTag(data) {
         let tabTxt = data.value
         for(let i = 0; i < this.value5id.length; i++){
@@ -175,15 +187,36 @@
         }
       },
       keyupEvent: function () {
-        alert('你按了上键！');
+        this.open("tips","你按了上键！")
       },
       renderContent(h, { node, data, store }) {
-        return (
-          <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-            <span>
-              <span>{data.id} &#166; {data.text}</span>
-            </span>
-          </span>);
+        if(data.disabled){
+          return (
+            <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+              <span style="width:90%;overflow:hidden;">
+                <span>{data.id} &#166; {data.text}</span>
+              </span>
+            </span>);
+        }
+        else if(node.isLeaf){
+          return (
+            <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+              <span style="width:90%;overflow:hidden;">
+                <span>{data.id} &#166; {data.text}</span>
+              </span>
+            </span>);
+        }
+        else{
+          return (
+            <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+              <span style="width:90%;overflow:hidden;">
+                <span>{data.id} &#166; {data.text}</span>
+              </span>
+              <span style="width:10%; text-align:right;">
+                <el-button type="text" on-click={ () => this.justme(node, data) }>只选我</el-button>
+              </span>
+            </span>);
+        }
       },
       idtoObj(){
         axios.get('static/json/GA_D_XSAJLBDM.js').then((res) => {
@@ -212,6 +245,13 @@
           if(value.children !== '' && value.children !==undefined) {
             this.ddget(value.children)
           }
+        });
+      },
+      open(title,content) {
+        const h = this.$createElement;
+        this.$notify({
+          title: title,
+          message: h('i', { style: 'color: teal'}, content)
         });
       }
     },

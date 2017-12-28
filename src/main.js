@@ -13,6 +13,7 @@ import select from './views/select/select';
 import tree from './views/tree/tree';
 import transfer from './views/transfer/transfer';
 import Cascader from './views/Cascader/Cascader';
+import test from './views/test/test';
 import ue from './views/editor/editor';
 import 'font-awesome/css/font-awesome.min.css';
 import Mock from './mock/mock';
@@ -61,7 +62,8 @@ let routes = [
       {path: '/select', component: select, name: 'select', class: 'fa-plug'},
       {path: '/tree', component: tree, name: 'tree', class: 'fa-plug'},
       {path: '/transfer', component: transfer, name: 'transfer', class: 'fa-plug'},
-      {path: '/Cascader', component: Cascader, name: 'Cascader', class: 'fa-plug'}
+      {path: '/Cascader', component: Cascader, name: 'Cascader', class: 'fa-plug'},
+      {path: '/test', component: test, name: 'test', class: 'fa-plug'}
     ]
   }
 ];
