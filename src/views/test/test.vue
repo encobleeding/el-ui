@@ -18,7 +18,6 @@
     created: function () {
     },
     beforeMount: function () {
-
     },
     mounted: function () {
     },

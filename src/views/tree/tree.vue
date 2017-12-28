@@ -16,7 +16,7 @@
   <el-input
     placeholder="输入ID,汉字，拼音字母，五笔字母可以查询"
     v-model="filterText"
-    v-if="seen"
+    v-show="seen"
     @keyup.up.native="keyupEvent()"
     class="newinput">
   </el-input>
@@ -54,7 +54,12 @@
   export default {
     watch: {
       filterText(val) {
-        this.$refs.tree.filter(val);
+        this.$refs.tree.filter(val)
+      }
+    },
+    computed: {
+      fullName(){
+        return  this.id  + " " +this.text;
       }
     },
     methods: {
@@ -101,19 +106,19 @@
         if (node.checked) {
           let isexits = this.result.indexOf(data.text)
           if (isexits === -1 && node.isLeaf === true) {
-            this.result = data.id + ',' + this.result;
-            this.trueresult = data.id + ',' + this.trueresult;
+            this.result = data.id + ',' + this.result
+            this.trueresult = data.id + ',' + this.trueresult
           }
         } else {
           let hasCheckText = node.data.text + ","
           let nowTxt = this.result
-          const reg = new RegExp(hasCheckText);
-          let newResult = nowTxt.replace(reg, "");
+          const reg = new RegExp(hasCheckText)
+          let newResult = nowTxt.replace(reg, "")
           this.result = newResult
           let hasCheckText2 = node.data.id + ","
           let nowTxt2 = this.trueresult
-          const reg2 = new RegExp(hasCheckText2);
-          let newResult2 = nowTxt2.replace(reg2, "");
+          const reg2 = new RegExp(hasCheckText2)
+          let newResult2 = nowTxt2.replace(reg2, "")
           this.trueresult = newResult2
         }
       },
