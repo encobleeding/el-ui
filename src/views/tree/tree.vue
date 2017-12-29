@@ -76,7 +76,7 @@
         return data2
       },
       convertData2() {
-        axios.get('static/json/GA_D_XSAJLBDM.js').then((res) => {
+        axios.get(this.fiterID.url).then((res) => {
           let datas = res.data
           this.data2 = datas
           this.data2.forEach((value, index, array) => {
@@ -89,10 +89,11 @@
       filterNode(value, data) {
         if (!value) return true;
         let ssjg = []
-        ssjg.push(data.id)
-        ssjg.push(data.text)
-        ssjg.push(data.py)
-        ssjg.push(data.wb);
+        let fillterCondients = this.fiterID.searchlabel
+        if (fillterCondients[0]) ssjg.push(data.id)
+        if (fillterCondients[1]) ssjg.push(data.text)
+        if (fillterCondients[2]) ssjg.push(data.py)
+        if (fillterCondients[3]) ssjg.push(data.wb)
         return ssjg.toString().indexOf(value) !== -1
       },
       handleNodeClick(data, node) {
@@ -269,10 +270,9 @@
         });
       }
     },
-    props: {
-      fiterID: {
-      }
-    },
+    props: [
+      "fiterID"
+    ],
     data() {
       return {
         filterText: '',

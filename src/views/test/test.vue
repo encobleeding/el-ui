@@ -7,7 +7,16 @@
   export default {
     data () {
       return {
-        fiterID: {"id": "0100"}
+        fiterID: {
+          "filterid": "['0400']",
+          "url": "static/json/GA_D_XSAJLBDM.js",
+          "searchlabel": "['id', 'txt', 'wb', 'py']",
+          "labeltxt": "['id', 'text']",
+          "checkattr": "checkbox",
+          "defaultcheck": "[]",
+          "defaultopen": "[]",
+          "defaultdisabled": "[]"
+        }
       };
     },
     components: {
