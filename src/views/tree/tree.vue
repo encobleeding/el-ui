@@ -287,13 +287,9 @@
         });
       }
     },
-<<<<<<< HEAD
     props: [
       "fiterID"
     ],
-=======
-    props: ['fiterID'],
->>>>>>> b07b86ad4e788d49b6e4d133076e160430487a29
     data() {
       return {
         filterText: '',
