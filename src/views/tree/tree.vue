@@ -54,7 +54,14 @@
   export default {
     watch: {
       filterText(val) {
-        this.$refs.tree.filter(val)
+        if(this.fiterID.filterid !== "" && this.fiterID.filterid !== undefined) {
+          for(let i = 0; i < this.fiterID.filterid.length; i++){
+            if(val === this.fiterID.filterid[i]){}
+          }
+        }
+        else{
+          this.$refs.tree.filter(val)
+        }
       }
     },
     computed: {
