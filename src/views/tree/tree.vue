@@ -75,15 +75,11 @@
         });
         return data2
       },
-      convertData2() {
+      convertData2(id) {
         axios.get(this.fiterID.url).then((res) => {
           let datas = res.data
+          this.ddget3(id,datas)
           this.data2 = datas
-          // this.data2.forEach((value, index, array) => {
-          //   if(value.id = "ROOT"){
-          //     value.disabled = true //禁用方法
-          //   } 
-          // })
         })
       },
       filterNode(value, data) {
@@ -412,8 +408,8 @@
     created() {
       this.idtoObj(this.fiterID.defaultcheck) //默认选中
       this.idtoObj2(this.fiterID.defaultopen) //默认展开
-      this.convertData2() //初始化数据
-      this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
+      this.convertData2(this.fiterID.defaultdisabled) //初始化数据
+      // this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
     }
   };
 </script>
