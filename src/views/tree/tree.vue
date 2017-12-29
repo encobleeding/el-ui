@@ -187,7 +187,7 @@
           for (let i=0; i<node.level-1; i++) {
             if(!parentNode.disabled)
               parentNode.indeterminate = true
-            parentNode = parentNode.parent
+              parentNode = parentNode.parent
           }
           this.value5.push(data.text)
           this.value5id.push({'txt':data.text, 'id':data.id})
@@ -259,6 +259,7 @@
               </span>);
           }
           else{
+            if(this.fiterID.onLeaf == "false"){
             return (
               <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                 <span style="width:90%;overflow:hidden;">
@@ -268,6 +269,15 @@
                   <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
                 </span>
               </span>);
+            }
+            else {
+              return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.id} &#166; {data.text}</span>
+                </span>
+              </span>);
+            }
           }
         }
         else {
