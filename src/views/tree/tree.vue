@@ -25,8 +25,8 @@
     class="filter-tree"
     :data="data2"
     node-key="id"
-    :default-expanded-keys="getid"
-    :default-checked-keys="getid"
+    :default-expanded-keys="getopenid"
+    :default-checked-keys="getchekcid"
     show-checkbox
     :check-strictly="false"
     render-after-expand
@@ -217,66 +217,108 @@
         this.open("tips","你按了上键！")
       },
       renderContent(h, { node, data, store, fitter}) {
-        fitter = this.fiterID.id;
-        let patt1 = RegExp("^(?=(" + fitter + "))");
-        if(patt1.test(data.id)) {
-          node.visible = false
+        fitter = this.fiterID.filterid
+        fitter.forEach((value, index, array) => {
+          let patt1 = RegExp("^(?=(" + fitter[index] + "))");
+          if(patt1.test(data.id)) {
+            node.visible = false
+          }
+        });
+        let showlabeltxt = this.fiterID.labeltxt
+        if(showlabeltxt[0] == 'id' && showlabeltxt[1] == 'text'){
+          if(data.disabled){
+            return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.id} &#166; {data.text}</span>
+                </span>
+              </span>);
+          }
+          else if(node.isLeaf){
+            return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.id} &#166; {data.text}</span>
+                </span>
+              </span>);
+          }
+          else{
+            return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.id} &#166; {data.text}</span>
+                </span>
+                <span style="width:10%; text-align:right;">
+                  <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
+                </span>
+              </span>);
+          }
         }
-        if(data.disabled){
-          return (
-            <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-              <span style="width:90%;overflow:hidden;">
-                <span>{data.id} &#166; {data.text}</span>
-              </span>
-            </span>);
-        }
-        else if(node.isLeaf){
-          return (
-            <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-              <span style="width:90%;overflow:hidden;">
-                <span>{data.id} &#166; {data.text}</span>
-              </span>
-            </span>);
-        }
-        else{
-          return (
-            <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
-              <span style="width:90%;overflow:hidden;">
-                <span>{data.id} &#166; {data.text}</span>
-              </span>
-              <span style="width:10%; text-align:right;">
-                <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
-              </span>
-            </span>);
+        else {
+          if(data.disabled){
+            return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.text}</span>
+                </span>
+              </span>);
+          }
+          else if(node.isLeaf){
+            return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.text}</span>
+                </span>
+              </span>);
+          }
+          else{
+            return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.text}</span>
+                </span>
+                <span style="width:10%; text-align:right;">
+                  <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
+                </span>
+              </span>);
+          }
         }
       },
-      idtoObj(){
-        axios.get('static/json/GA_D_XSAJLBDM.js').then((res) => {
-          let data2=res.data
+      idtoObj(firstdata){ //通过ID查询文本
+        axios.get(this.fiterID.url).then((res) => {
+          let data2 = res.data
           data2.forEach((value, index, array) => {
-            for(let j = 0; j<= this.getid.length; j++) {
-              if(value.id == this.getid[j]) {
-                this.value5id.push({'txt':value.text, 'id':this.getid[j]})
-                this.value5.push(value.text)
-              }
-            }
-            if(value.children !== '' && value.children !==undefined) {
-              this.ddget(value.children)
-            }
+            // for(let j = 0; j< firstdata.length; j++) {
+            //   if(value.id == firstdata[j]) {
+            //     this.value5id.push({'txt':value.text, 'id':firstdata[j]})
+            //     this.value5.push(value.text)
+            //     this.getchekcid.push(value.id)
+            //   }
+            // }
+            // if(value.children !== '' && value.children !==undefined) {
+            //   this.ddget(firstdata,value.children)
+            // }
+            
           });
+          this.ddget(firstdata,data2)
         });
       },
-      ddget(newdata2) {
+      ddget(firstdata,newdata2) {
         newdata2.forEach((value, index, array) => {
-        for(let j = 0; j<= this.getid.length; j++) {
-            if(value.id == this.getid[j]) {
-              this.value5id.push({'txt':value.text, 'id':this.getid[j]})
-              this.value5.push(value.text)
+          for(let j = 0; j< firstdata.length; j++) {
+              if(value.id == firstdata[j]) {
+                this.value5id.push({'txt':value.text, 'id':firstdata[j]})
+                this.value5.push(value.text)
+                this.getchekcid.push(value.id)
+              }
+          }
+          console.log(index)
+          console.log( typeof(value.children))
+          value.children.forEach((value, index, array) => {
+            if(value.children !== '' && value.children !== undefined) {
+              this.ddget(firstdata,value.children)
             }
-          }
-          if(value.children !== '' && value.children !==undefined) {
-            this.ddget(value.children)
-          }
+          });
         });
       },
       open(title,content) {
@@ -304,12 +346,15 @@
         seen: false,
         value5: [],
         value5id: [],
-        getid: ['01000500']
+        getchekcid: [],
+        getopenid: [],
+        getdisableid: []
       };
     },
     created() {
+      this.idtoObj(this.fiterID.defaultcheck)
       this.convertData2()
-      this.idtoObj()
+      
     }
   };
 </script>
