@@ -168,15 +168,14 @@
       },
       justme(node, data) {
         event.cancelBubble = true;
-        const parent = node.parent;
-        const children = parent.data.children || parent.data;
-        const index = children.findIndex(d => d.id === data.id);
+        // const parent = node.childNodes
+        // const children = parent.data.children || parent.data;
+        // const index = children.findIndex(d => d.id === data.id);
         let nowstate = node.checked
         let nowChildState = node.childNodes[0].checked
-        console.log(nowstate)
-        console.log(node.childNodes[0].checked)
+        let childNode = node.childNodes
+        
         if (nowChildState){
-          console.log(11)
           node.checked = true
           node.indeterminate = false
         } else if (!nowstate) {
@@ -188,19 +187,34 @@
               parentNode.indeterminate = true
             parentNode = parentNode.parent
           }
+          this.value5.push(node.text)
+          this.value5id.push({'txt':node.text, 'id':node.id})
         } else if (nowstate) {
           node.checked = false
-          console.log(node)
           let parentNode = node.parent
-          for (let i=0; i<node.level-1; i++) {
-            if(!parentNode.disabled)
+          let nodeNum = 0
+          node.parent.childNodes.forEach((value, index, array) => {
+          if (value.checked || value.indeterminate){
+            nodeNum++
+          }
+        });
+        if (!nodeNum) {
+            for (let i=0; i<node.level-1; i++) {
               parentNode.indeterminate = false
-            parentNode = parentNode.parent
+              parentNode = parentNode.parent
+            }
           }
         }
-        node.childNodes.forEach((value, index, array) => {
-          if (value.checked){
+        this.forEachChild(node.childNodes)
+      },
+      forEachChild(node) {
+        node.forEach((value, index, array) => {
+          if (value.checked || value.indeterminate){
             value.checked = false
+            value.indeterminate = false
+          }
+          if (value.childNodes) {
+            this.forEachChild(value.childNodes)
           }
         });
       },
