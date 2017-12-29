@@ -363,7 +363,7 @@
       idtoObj3(firstdata){ // 通过ID查询文本
         axios.get(this.fiterID.url).then((res) => {
           let data2 = res.data
-          this.ddget3(firstdata,this.data2)
+          this.ddget3(firstdata,data2)
         })
       },
       ddget3(firstdata,newdata2) { // 默认禁用
@@ -413,7 +413,11 @@
       this.idtoObj(this.fiterID.defaultcheck) //默认选中
       this.idtoObj2(this.fiterID.defaultopen) //默认展开
       this.convertData2() //初始化数据
+    },
+    mounted: function () {
       this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
+    },
+    updated: function () {
     }
   };
 </script>
