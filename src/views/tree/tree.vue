@@ -27,7 +27,7 @@
     node-key="id"
     :default-expanded-keys="getopenid"
     :default-checked-keys="getchekcid"
-    show-checkbox
+    :show-checkbox="fiterID.isCheck"
     :check-strictly="false"
     render-after-expand
     highlight-current
@@ -269,7 +269,8 @@
           }
         });
         let showlabeltxt = this.fiterID.labeltxt
-        if(showlabeltxt[0] == 'id' && showlabeltxt[1] == 'text'){
+        if (this.fiterID.isCheck) {
+          if(showlabeltxt[0] == 'id' && showlabeltxt[1] == 'text'){
           if(data.disabled){
             return (
               <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
@@ -297,8 +298,7 @@
                   <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
                 </span>
               </span>);
-            }
-            else {
+            } else {
               return (
               <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                 <span style="width:90%;overflow:hidden;">
@@ -336,6 +336,9 @@
                 </span>
               </span>);
           }
+        }
+        } else {
+          
         }
       },
       idtoObj(firstdata){ //通过ID查询文本

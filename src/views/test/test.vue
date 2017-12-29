@@ -16,7 +16,8 @@
           "defaultcheck": ['01000500'], // 默认选择
           "defaultopen": ['02000000'], // 默认展开
           "defaultdisabled": ['01000700'], // 默认禁用
-          "onLeaf": "false" // 根节点是否可选,true不可,false可选
+          "onLeaf": "false", // 根节点是否可选,true不可,false可选
+          'isCheck': false
         }
       };
     },
