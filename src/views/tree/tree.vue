@@ -147,23 +147,28 @@
             this.value5id.push({'txt':node.text, 'id':node.id})
           }
         } else {
-          let hasCheckText = node.text + ","
-          let nowTxt = this.result
-          const reg = new RegExp(hasCheckText);
-          let newResult = nowTxt.replace(reg, "");
-          this.result = newResult
-          let haschecArr = node.text
-          let index = this.value5.indexOf(haschecArr);
-          if (index > -1) {
-            this.value5.splice(index, 1)
-          }
-          let hasidchecArr = node.id
-          this.value5id.forEach((value, index, array) => {
-            let idindex = value.id.indexOf(hasidchecArr)
-            if (idindex > -1) {
-              this.value5id.splice(index, 1)
+          if(this.fiterID.onLeaf == "true"){
+            let hasCheckText = node.text + ","
+            let nowTxt = this.result
+            const reg = new RegExp(hasCheckText);
+            let newResult = nowTxt.replace(reg, "");
+            this.result = newResult
+            let haschecArr = node.text
+            let index = this.value5.indexOf(haschecArr);
+            if (index > -1) {
+              this.value5.splice(index, 1)
             }
-          });
+            let hasidchecArr = node.id
+            this.value5id.forEach((value, index, array) => {
+              let idindex = value.id.indexOf(hasidchecArr)
+              if (idindex > -1) {
+                this.value5id.splice(index, 1)
+              }
+            });
+          }
+          else{
+            
+          }
         }
       },
       justme(node, data) { //右侧只选择根节点
@@ -172,15 +177,10 @@
         // const children = parent.data.children || parent.data;
         // const index = children.findIndex(d => d.id === data.id);
         let nowstate = node.checked
+        let nowindeterminate = node.indeterminate
         let nowChildState = node.childNodes[0].checked
         let childNode = node.childNodes
-        
-        if (nowChildState){
-          node.checked = true
-          node.indeterminate = false
-          this.value5.push(data.text)
-          this.value5id.push({'txt':data.text, 'id':data.id})
-        } else if (!nowstate) {
+        if (!nowstate) {
           node.checked = true
           node.indeterminate = false
           let parentNode = node.parent
@@ -191,16 +191,16 @@
           }
           this.value5.push(data.text)
           this.value5id.push({'txt':data.text, 'id':data.id})
-        } else if (nowstate) {
+        } else {
           node.checked = false
           let parentNode = node.parent
           let nodeNum = 0
           node.parent.childNodes.forEach((value, index, array) => {
-          if (value.checked || value.indeterminate){
-            nodeNum++
-          }
-        });
-        if (!nodeNum) {
+            if (value.checked || value.indeterminate){
+              nodeNum++
+            }
+          });
+          if (!nodeNum) {
             for (let i=0; i<node.level-1; i++) {
               parentNode.indeterminate = false
               parentNode = parentNode.parent
