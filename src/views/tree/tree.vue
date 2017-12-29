@@ -79,11 +79,11 @@
         axios.get(this.fiterID.url).then((res) => {
           let datas = res.data
           this.data2 = datas
-          this.data2.forEach((value, index, array) => {
-            if(value.id = "ROOT"){
-              value.disabled = true //禁用方法
-            } 
-          })
+          // this.data2.forEach((value, index, array) => {
+          //   if(value.id = "ROOT"){
+          //     value.disabled = true //禁用方法
+          //   } 
+          // })
         })
       },
       filterNode(value, data) {
@@ -321,7 +321,7 @@
       idtoObj2(firstdata){ // 通过ID查询文本
         axios.get(this.fiterID.url).then((res) => {
           let data2 = res.data
-          this.ddget(firstdata,data2)
+          this.ddget2(firstdata,data2)
         });
       },
       ddget2(firstdata,newdata2) { // 默认展开
@@ -330,19 +330,19 @@
               if(value.id == firstdata[j]) {
                 this.value5id.push({'txt':value.text, 'id':firstdata[j]})
                 this.value5.push(value.text)
-                this.getopenid.push(value.id)
+                this.getopenid.push(firstdata[j])
               }
           }
           if(value.children !== '' && value.children !== undefined) {
-            this.ddget(firstdata,value.children)
+            this.ddget2(firstdata,value.children)
           }
         });
       },
       idtoObj3(firstdata){ // 通过ID查询文本
         axios.get(this.fiterID.url).then((res) => {
           let data2 = res.data
-          this.ddget(firstdata,data2)
-        });
+          this.ddget3(firstdata,this.data2)
+        })
       },
       ddget3(firstdata,newdata2) { // 默认禁用
         newdata2.forEach((value, index, array) => {
@@ -350,11 +350,12 @@
               if(value.id == firstdata[j]) {
                 this.value5id.push({'txt':value.text, 'id':firstdata[j]})
                 this.value5.push(value.text)
-                this.getchekcid.push(value.id)
+                this.getdisableid.push(value.id)
+                value.disabled = true
               }
           }
           if(value.children !== '' && value.children !== undefined) {
-            this.ddget(firstdata,value.children)
+            this.ddget3(firstdata,value.children)
           }
         });
       },
@@ -389,10 +390,10 @@
       };
     },
     created() {
+      this.convertData2() //初始化数据
       this.idtoObj(this.fiterID.defaultcheck) //默认选中
       this.idtoObj2(this.fiterID.defaultopen) //默认展开
       this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
-      this.convertData2()
       
     }
   };
