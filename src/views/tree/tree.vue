@@ -172,14 +172,31 @@
         const children = parent.data.children || parent.data;
         const index = children.findIndex(d => d.id === data.id);
         let nowstate = node.checked
-        if (nowstate) {
-          node.checked = false
-          node.indeterminate = false
-          event.target.textContent = '勾选当前'
-        } else {
+        let nowChildState = node.childNodes[0].checked
+        console.log(nowstate)
+        console.log(node.childNodes[0].checked)
+        if (nowChildState){
+          console.log(11)
           node.checked = true
           node.indeterminate = false
-          event.target.textContent = '取消勾选'
+        } else if (!nowstate) {
+          node.checked = true
+          node.indeterminate = false
+          let parentNode = node.parent
+          for (let i=0; i<node.level-1; i++) {
+            if(!parentNode.disabled)
+              parentNode.indeterminate = true
+            parentNode = parentNode.parent
+          }
+        } else if (nowstate) {
+          node.checked = false
+          console.log(node)
+          let parentNode = node.parent
+          for (let i=0; i<node.level-1; i++) {
+            if(!parentNode.disabled)
+              parentNode.indeterminate = false
+            parentNode = parentNode.parent
+          }
         }
         node.childNodes.forEach((value, index, array) => {
           if (value.checked){
@@ -228,7 +245,7 @@
                 <span>{data.id} &#166; {data.text}</span>
               </span>
               <span style="width:10%; text-align:right;">
-                <el-button type="text" on-click={ () => this.justme(node, data) }>勾选当前</el-button>
+                <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
               </span>
             </span>);
         }
@@ -270,9 +287,13 @@
         });
       }
     },
+<<<<<<< HEAD
     props: [
       "fiterID"
     ],
+=======
+    props: ['fiterID'],
+>>>>>>> b07b86ad4e788d49b6e4d133076e160430487a29
     data() {
       return {
         filterText: '',
