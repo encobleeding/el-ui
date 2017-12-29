@@ -163,7 +163,18 @@
             });
           }
           else{
-            
+            let haschecArr = node.text
+            let index = this.value5.indexOf(haschecArr);
+            if (index > -1) {
+              this.value5.splice(index, 1)
+            }
+            let hasidchecArr = node.id
+            this.value5id.forEach((value, index, array) => {
+              let idindex = value.id.indexOf(hasidchecArr)
+              if (idindex > -1) {
+                this.value5id.splice(index, 1)
+              }
+            });
           }
         }
       },
