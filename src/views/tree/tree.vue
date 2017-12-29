@@ -191,7 +191,12 @@
         let nowindeterminate = node.indeterminate
         let nowChildState = node.childNodes[0].checked
         let childNode = node.childNodes
-        if (!nowstate) {
+        if (nowChildState){
+            node.checked = true
+            node.indeterminate = false
+            this.value5.push(data.text)
+            this.value5id.push({'txt':data.text, 'id':data.id})
+          } else if (!nowstate) {
           node.checked = true
           node.indeterminate = false
           let parentNode = node.parent
