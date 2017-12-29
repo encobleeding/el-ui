@@ -301,23 +301,10 @@
       idtoObj(firstdata){ //通过ID查询文本
         axios.get(this.fiterID.url).then((res) => {
           let data2 = res.data
-          data2.forEach((value, index, array) => {
-            // for(let j = 0; j< firstdata.length; j++) {
-            //   if(value.id == firstdata[j]) {
-            //     this.value5id.push({'txt':value.text, 'id':firstdata[j]})
-            //     this.value5.push(value.text)
-            //     this.getchekcid.push(value.id)
-            //   }
-            // }
-            // if(value.children !== '' && value.children !==undefined) {
-            //   this.ddget(firstdata,value.children)
-            // }
-            
-          });
           this.ddget(firstdata,data2)
         });
       },
-      ddget(firstdata,newdata2) {
+      ddget(firstdata,newdata2) { // 默认选中
         newdata2.forEach((value, index, array) => {
           for(let j = 0; j< firstdata.length; j++) {
               if(value.id == firstdata[j]) {
@@ -326,13 +313,49 @@
                 this.getchekcid.push(value.id)
               }
           }
-          console.log(index)
-          console.log( typeof(value.children))
-          value.children.forEach((value, index, array) => {
-            if(value.children !== '' && value.children !== undefined) {
-              this.ddget(firstdata,value.children)
-            }
-          });
+          if(value.children !== '' && value.children !== undefined) {
+            this.ddget(firstdata,value.children)
+          }
+        });
+      },
+      idtoObj2(firstdata){ // 通过ID查询文本
+        axios.get(this.fiterID.url).then((res) => {
+          let data2 = res.data
+          this.ddget(firstdata,data2)
+        });
+      },
+      ddget2(firstdata,newdata2) { // 默认展开
+        newdata2.forEach((value, index, array) => {
+          for(let j = 0; j< firstdata.length; j++) {
+              if(value.id == firstdata[j]) {
+                this.value5id.push({'txt':value.text, 'id':firstdata[j]})
+                this.value5.push(value.text)
+                this.getopenid.push(value.id)
+              }
+          }
+          if(value.children !== '' && value.children !== undefined) {
+            this.ddget(firstdata,value.children)
+          }
+        });
+      },
+      idtoObj3(firstdata){ // 通过ID查询文本
+        axios.get(this.fiterID.url).then((res) => {
+          let data2 = res.data
+          this.ddget(firstdata,data2)
+        });
+      },
+      ddget3(firstdata,newdata2) { // 默认禁用
+        newdata2.forEach((value, index, array) => {
+          for(let j = 0; j< firstdata.length; j++) {
+              if(value.id == firstdata[j]) {
+                this.value5id.push({'txt':value.text, 'id':firstdata[j]})
+                this.value5.push(value.text)
+                this.getchekcid.push(value.id)
+              }
+          }
+          if(value.children !== '' && value.children !== undefined) {
+            this.ddget(firstdata,value.children)
+          }
         });
       },
       open(title,content) {
@@ -366,7 +389,9 @@
       };
     },
     created() {
-      this.idtoObj(this.fiterID.defaultcheck)
+      this.idtoObj(this.fiterID.defaultcheck) //默认选中
+      this.idtoObj2(this.fiterID.defaultopen) //默认展开
+      this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
       this.convertData2()
       
     }
