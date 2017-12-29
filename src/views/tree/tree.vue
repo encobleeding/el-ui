@@ -345,7 +345,15 @@
           }
         }
         } else {
-          
+          return (
+              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.text}</span>
+                </span>
+                <span style="width:10%; text-align:right;">
+                  <el-button type="text" on-click={ () => this.radioClick(node, data) }><i class="el-icon-circle-check"></i></el-button>
+                </span>
+              </span>);
         }
       },
       idtoObj(firstdata){ //通过ID查询文本
@@ -411,6 +419,12 @@
           title: title,
           message: h('i', { style: 'color: teal'}, content)
         });
+      },
+      radioClick(node, data) {
+          this.value5 = []
+          this.value5.push(data.text)
+          this.value5id = []
+          this.value5id.push({'txt':data.text, 'id':data.id})
       }
     },
     props: [
