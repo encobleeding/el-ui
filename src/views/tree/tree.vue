@@ -310,7 +310,7 @@
         newdata2.forEach((value, index, array) => {
           for(let j = 0; j< firstdata.length; j++) {
               if(value.id == firstdata[j]) {
-                this.value5id.push({'txt':value.text, 'id':firstdata[j]})
+                this.value5id.push({'txt':value.text, 'id':value.id})
                 this.value5.push(value.text)
                 this.getchekcid.push(value.id)
               }
@@ -330,8 +330,6 @@
         newdata2.forEach((value, index, array) => {
           for(let j = 0; j< firstdata.length; j++) {
               if(value.id == firstdata[j]) {
-                this.value5id.push({'txt':value.text, 'id':firstdata[j]})
-                this.value5.push(value.text)
                 this.getopenid.push(firstdata[j])
               }
           }
@@ -350,8 +348,6 @@
         newdata2.forEach((value, index, array) => {
           for(let j = 0; j< firstdata.length; j++) {
               if(value.id == firstdata[j]) {
-                this.value5id.push({'txt':value.text, 'id':firstdata[j]})
-                this.value5.push(value.text)
                 this.getdisableid.push(value.id)
                 value.disabled = true
               }
