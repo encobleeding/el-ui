@@ -161,24 +161,28 @@
                 this.value5id.splice(index, 1)
               }
             });
-          }
-          else{
-            let haschecArr = node.text
-            let index = this.value5.indexOf(haschecArr);
-            if (index > -1) {
-              this.value5.splice(index, 1)
-            }
-            let hasidchecArr = node.id
-            this.value5id.forEach((value, index, array) => {
-              let idindex = value.id.indexOf(hasidchecArr)
-              if (idindex > -1) {
-                this.value5id.splice(index, 1)
+          } else {
+            if(!node.justmeClick) {
+              let haschecArr = node.text
+              let index = this.value5.indexOf(haschecArr);
+              if (index > -1) {
+                this.value5.splice(index, 1)
               }
-            });
+              let hasidchecArr = node.id
+              this.value5id.forEach((value, index, array) => {
+                let idindex = value.id.indexOf(hasidchecArr)
+                if (idindex > -1) {
+                  this.value5id.splice(index, 1)
+                }
+              });
+            } else {
+              node.justmeClick = 'false'
+            }
           }
         }
       },
       justme(node, data) { //右侧只选择根节点
+        data.justmeClick = true
         event.cancelBubble = true;
         // const parent = node.childNodes
         // const children = parent.data.children || parent.data;
