@@ -7,7 +7,7 @@
   export default {
     data () {
       return {
-        fiterID: {"id": "0100"}
+        fiterID: {'id': "0100"}
       };
     },
     components: {

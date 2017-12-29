@@ -10,7 +10,7 @@ import Index from './views/index/index';
 import Table from './views/table/table';
 import Form from './views/form/form';
 import select from './views/select/select';
-import tree from './views/tree/tree';
+// import tree from './views/tree/tree';
 import transfer from './views/transfer/transfer';
 import Cascader from './views/Cascader/Cascader';
 import test from './views/test/test';
@@ -60,7 +60,7 @@ let routes = [
       {path: '/form', component: Form, name: 'form', class: 'fa-newspaper-o'},
       {path: '/editor', component: ue, name: 'editor', class: 'fa-plug'},
       {path: '/select', component: select, name: 'select', class: 'fa-plug'},
-      {path: '/tree', component: tree, name: 'tree', class: 'fa-plug'},
+      // {path: '/tree', component: tree, name: 'tree', class: 'fa-plug'},
       {path: '/transfer', component: transfer, name: 'transfer', class: 'fa-plug'},
       {path: '/Cascader', component: Cascader, name: 'Cascader', class: 'fa-plug'},
       {path: '/test', component: test, name: 'test', class: 'fa-plug'}
