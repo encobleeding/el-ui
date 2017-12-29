@@ -178,6 +178,8 @@
         if (nowChildState){
           node.checked = true
           node.indeterminate = false
+          this.value5.push(data.text)
+          this.value5id.push({'txt':data.text, 'id':data.id})
         } else if (!nowstate) {
           node.checked = true
           node.indeterminate = false
@@ -187,8 +189,8 @@
               parentNode.indeterminate = true
             parentNode = parentNode.parent
           }
-          this.value5.push(node.text)
-          this.value5id.push({'txt':node.text, 'id':node.id})
+          this.value5.push(data.text)
+          this.value5id.push({'txt':data.text, 'id':data.id})
         } else if (nowstate) {
           node.checked = false
           let parentNode = node.parent
