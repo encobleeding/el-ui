@@ -134,7 +134,7 @@
       showtree() {
         this.seen = true
       },
-      handleNodeCheckClick(node, data, store) {
+      handleNodeCheckClick(node, data, store) { // 复选框事件
         if (data && !store) {}
         if (!node.children && data) {
           let isexits = this.result.indexOf(node.text)
@@ -166,7 +166,7 @@
           });
         }
       },
-      justme(node, data) {
+      justme(node, data) { //右侧只选择根节点
         event.cancelBubble = true;
         // const parent = node.childNodes
         // const children = parent.data.children || parent.data;
@@ -220,7 +220,7 @@
           }
         });
       },
-      removeTag(data) {
+      removeTag(data) { //移除文本框标签
         let tabTxt = data.value
         for(let i = 0; i < this.value5id.length; i++){
           if(this.value5id[i].txt == tabTxt){
@@ -388,11 +388,10 @@
       };
     },
     created() {
-      this.convertData2() //初始化数据
       this.idtoObj(this.fiterID.defaultcheck) //默认选中
       this.idtoObj2(this.fiterID.defaultopen) //默认展开
+      this.convertData2() //初始化数据
       this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
-      
     }
   };
 </script>
