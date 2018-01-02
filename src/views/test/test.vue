@@ -8,19 +8,20 @@
     data () {
       return {
         fiterID: {
-          "filterid": ['0400', '0800'], // 过滤
+          "filterid": ['0400', '0800'], // 过滤ID数组
           "url": "static/json/GA_D_XSAJLBDM.js", // 数据url
           "searchlabel": ['id', 'txt', 'wb', 'py'], // 搜索条件ID,文本,五笔,拼音
           "labeltxt": ['id', 'text'], // 显示文字,id+文字
-          "checkattr": "checkbox", // 单选radio,多选checkbox,未解决
+          "checkattr": "checkbox",
           "defaultcheck": ['01000500'], // 默认选择
           "defaultopen": ['02000000'], // 默认展开
           "defaultdisabled": ['01000700'], // 默认禁用
-          "onLeaf": "false", // 根节点是否可选,true不可,false可选
-          'isCheck': false
+          "onLeaf": "false", // 根节点是否可选,true不可,false可选,仅在checkbox生效
+          'isCheck': false // 是否启用checkbox,true为复选框
         }
       };
     },
+    methods: {},
     components: {
       'v-tree': newtree
     },

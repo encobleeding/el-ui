@@ -36,8 +36,10 @@
     ref="tree"
     @check-change="handleNodeCheckClick"
     v-show="seen"
+    @node-click="radiohandleNodeClick"
     :render-content="renderContent">
   </el-tree>
+   <el-button type="primary"  @click.stop="clickcourse()">完成</el-button>
   </section>
 </template>
 
@@ -46,6 +48,7 @@
 .el-tree{max-height: 500px; overflow-y: auto;}
 .newinput{margin-top:20px; margin-bottom:-1px;}
 .hidden,.el-input__icon.el-icon-caret-top{display:none;}
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .el-icon-circle-check{color:#20a0ff;}
 </style>
 <script type="text/jsx">
   import axios from 'axios'
@@ -57,6 +60,9 @@
         if(this.fiterID.filterid !== "" && this.fiterID.filterid !== undefined) {
           for(let i = 0; i < this.fiterID.filterid.length; i++){
             if(val === this.fiterID.filterid[i]){}
+            else{
+              this.$refs.tree.filter(val)
+            }
           }
         }
         else{
@@ -124,6 +130,15 @@
           const reg2 = new RegExp(hasCheckText2)
           let newResult2 = nowTxt2.replace(reg2, "")
           this.trueresult = newResult2
+        }
+      },
+      radiohandleNodeClick(data, node) {
+        if(this.fiterID.isCheck){}
+        else{
+          this.value5 = []
+          this.value5.push(data.text)
+          this.value5id = []
+          this.value5id.push({'txt':data.text, 'id':data.id})
         }
       },
       handleNodeoneClick(obj, node, data) {
@@ -302,7 +317,7 @@
                   <span>{data.id} &#166; {data.text}</span>
                 </span>
                 <span style="width:10%; text-align:right;">
-                  <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
+                  <p on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></p>
                 </span>
               </span>);
             } else {
@@ -345,15 +360,28 @@
           }
         }
         } else {
-          return (
-              <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+          if(this.fiterID.labeltxt[0] == 'id' && this.fiterID.labeltxt[1] == 'text'){
+            return (
+              <span style="width:92%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
+                <span style="width:90%;overflow:hidden;">
+                  <span>{data.id} &#166; {data.text}</span>
+                </span>
+                <span style="width:10%; text-align:right;">
+                  <p on-click={ () => this.radioClick(node, data) }> <i class="el-icon-circle-check {data.checked}"></i></p>
+                </span>
+              </span>
+              // <el-radio v-model="1" label="{data.id}">{data.text}</el-radio>
+              );
+          }
+          else{
+            return (
+              <span style="width:92%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                 <span style="width:90%;overflow:hidden;">
                   <span>{data.text}</span>
                 </span>
-                <span style="width:10%; text-align:right;">
-                  <el-button type="text" on-click={ () => this.radioClick(node, data) }><i class="el-icon-circle-check"></i></el-button>
-                </span>
-              </span>);
+              </span>
+              );
+          }
         }
       },
       idtoObj(firstdata){ //通过ID查询文本
@@ -425,6 +453,9 @@
           this.value5.push(data.text)
           this.value5id = []
           this.value5id.push({'txt':data.text, 'id':data.id})
+      },
+      clickcourse() {
+        this.seen = false
       }
     },
     props: [
@@ -454,6 +485,17 @@
       this.idtoObj2(this.fiterID.defaultopen) //默认展开
       this.convertData2(this.fiterID.defaultdisabled) //初始化数据
       // this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
-    }
+    },
+    mounted () {
+      this.bodyListener = (e) => {
+        if (e.keyCode === 13 && e.target === document.body){
+          this.seen = false
+        }
+      }
+      document.body.addEventListener('keyup', this.bodyListener, false)
+    },
+    beforeDestroy() {
+      document.body.removeEventListener('keyup', this.bodyListener)
+    },
   };
 </script>
