@@ -57,6 +57,7 @@
 .el-tree-node__content:hover .el-icon-circle-check{opacity: 100;}
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{background-color: #e4e8f1;}
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .el-icon-circle-check{color:#20a0ff; opacity: 100;}
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .el-icon-check{color:#20a0ff; opacity: 100;}
 .bgclass{background-color:#fff;}
 .bgclasshover{background-color:#20afff;}
 .iconcehck{opacity: 100; color:#20afff;}
@@ -674,48 +675,49 @@
               let checkbglen = checkbg.length-1
               for(let i=0; i <= checkbglen; i++){
                 // let hasenter = false
-                if(checkbg[i].firstChild.style.backgroundColor == "rgb(228, 232, 241)"){
-                  let hasenter = checkbg[i].firstChild.getAttribute("has") == "has" ? true : false
-                  let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
-                  let checkdom=[]
-                  checkdom.push(checktxt)
-                  let convTxt = checkdom[0].data
-                  if(convTxt.indexOf("¦") > 0){
-                    let getids = convTxt.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-                    if(hasenter){
-                      checkbg[i].firstChild.setAttribute("has","no")
-                      // let index = this.getchekcid.indexOf(getids);
-                      // if (index > -1)  this.getchekcid.splice(index, 1)
-                      // let newarry = this.getchekcid
-                      // this.$refs.tree.setCheckedKeys(newarry);
+                let haschecked = checkbg[i].firstChild.childNodes[1].firstChild.classList.contains("is-checked")
+                  if(checkbg[i].firstChild.style.backgroundColor == "rgb(228, 232, 241)"){
+                    let hasenter = checkbg[i].firstChild.getAttribute("has") == "has" ? true : false
+                    let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
+                    let checkdom=[]
+                    checkdom.push(checktxt)
+                    let convTxt = checkdom[0].data
+                    if(convTxt.indexOf("¦") > 0){
+                      let getids = convTxt.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+                      if(hasenter){
+                        checkbg[i].firstChild.setAttribute("has","no")
+                        // let index = this.getchekcid.indexOf(getids);
+                        // if (index > -1)  this.getchekcid.splice(index, 1)
+                        // let newarry = this.getchekcid
+                        // this.$refs.tree.setCheckedKeys(newarry);
 
-                      for(let i = 0; i < this.getchekcid.length; i++){
-                        if(this.getchekcid[i] == getids){
-                          this.$refs.tree.setChecked (this.getchekcid[i], false)
-                          this.getchekcid.splice(i, 1)
+                        for(let i = 0; i < this.getchekcid.length; i++){
+                          if(this.getchekcid[i] == getids){
+                            this.$refs.tree.setChecked (this.getchekcid[i], false)
+                            this.getchekcid.splice(i, 1)
+                          }
                         }
-                      }
-                      
-                    }
-                    else{
-                      let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
-                      if(ishaschild == null) {
-                         checkbg[i].firstChild.setAttribute("has","has")
-                        if(this.getchekcid.indexOf(getids) == -1) this.getchekcid.push(getids)
-                        this.$refs.tree.setChecked (getids, true)
+                        
                       }
                       else{
+                        let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
+                        if(ishaschild == null) {
+                          checkbg[i].firstChild.setAttribute("has","has")
+                          if(this.getchekcid.indexOf(getids) == -1) this.getchekcid.push(getids)
+                          this.$refs.tree.setChecked (getids, true)
+                        }
+                        else{
+                        }
+                        // this.$refs.tree.setCheckedKeys(this.getchekcid);
                       }
-                      // this.$refs.tree.setCheckedKeys(this.getchekcid);
+                    }
+                    else{
+                      //没有ID情况
                     }
                   }
                   else{
-                    //没有ID情况
+                    //没有选中
                   }
-                }
-                else{
-                  //没有选中
-                }
               }
            }
            else{
