@@ -1,5 +1,8 @@
 <template>
+<section>
   <v-tree :fiterID="fiterID"></v-tree>
+  <v-tree2 :fiterID="fiterID"></v-tree2>
+</section>
 </template>
 
 <script>
@@ -23,7 +26,8 @@
     },
     methods: {},
     components: {
-      'v-tree': newtree
+      'v-tree': newtree,
+      'v-tree2': newtree
     },
     beforeCreate: function () {
     },

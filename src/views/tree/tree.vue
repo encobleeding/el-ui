@@ -63,6 +63,7 @@
 .bgclass{background-color:#fff;}
 .bgclasshover{background-color:#20afff;}
 .iconcehck{opacity: 100; color:#20afff;}
+.form-section{float: left;}
 </style>
 <script type="text/jsx">
   import axios from 'axios'
