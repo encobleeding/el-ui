@@ -13,7 +13,7 @@
     class="inputWidth">
   </el-select>
 
-  <!-- <el-input v-model="result" @focus="showtree"></el-input> -->
+  <!-- <el-input v-model="result" @focus="showtree"></el-input>  -->
 
   <el-input
     placeholder="输入ID,汉字，拼音字母，五笔字母可以查询"
@@ -48,7 +48,7 @@
 </template>
 
 <style>
-.inputWidth{width:500px;}
+.inputWidth{width:500px; height:44px;overflow-y: auto;}
 .el-tree{max-height: 500px; overflow-y: auto;}
 .newinput{margin-top:20px; margin-bottom:-1px;}
 .hidden,.el-input__icon.el-icon-caret-top{display:none;}
@@ -107,6 +107,8 @@
           this.data2 = datas
           var isArry = typeof datas === 'object' && datas.constructor == Array
           this.seen = false
+          let aa =  _.indexOf(datas,"0100")
+          
         })
       },
       filterNode(value, data) {
@@ -370,7 +372,7 @@
               return (
                 <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                   <span style="width:90%;overflow:hidden;">
-                    <span>{data.id} &#166; {data.text}</span>
+                    <span title={data.id}>{data.id} &#166; {data.text}</span>
                   </span>
                 </span>);
             }
@@ -378,7 +380,7 @@
               return (
                 <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                   <span style="width:90%;overflow:hidden;">
-                    <span>{data.id} &#166; {data.text}</span>
+                    <span title={data.id}>{data.id} &#166; {data.text}</span>
                   </span>
                 </span>);
             }
@@ -387,7 +389,7 @@
                 return (
                 <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                   <span style="width:90%;overflow:hidden;">
-                    <span>{data.id} &#166; {data.text}</span>
+                    <span title={data.id}>{data.id} &#166; {data.text}</span>
                   </span>
                   <span style="width:10%; text-align:right;">
                     <p on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></p>
@@ -397,7 +399,7 @@
                 return (
                 <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                   <span style="width:90%;overflow:hidden;">
-                    <span>{data.id} &#166; {data.text}</span>
+                    <span title={data.id}>{data.id} &#166; {data.text}</span>
                   </span>
                 </span>);
               }
@@ -408,7 +410,7 @@
               return (
                 <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                   <span style="width:90%;overflow:hidden;">
-                    <span>{data.text}</span>
+                    <span title={data.id}>{data.text}</span>
                   </span>
                 </span>);
             }
@@ -416,7 +418,7 @@
               return (
                 <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                   <span style="width:90%;overflow:hidden;">
-                    <span>{data.text}</span>
+                    <span title={data.id}>{data.text}</span>
                   </span>
                 </span>);
             }
@@ -424,7 +426,7 @@
               return (
                 <span style="width:85%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                   <span style="width:90%;overflow:hidden;">
-                    <span>{data.text}</span>
+                    <span title={data.id}>{data.text}</span>
                   </span>
                   <span style="width:10%; text-align:right;">
                     <el-button type="text" on-click={ () => this.justme(node, data) }><i class="el-icon-check"></i></el-button>
@@ -438,26 +440,24 @@
               return (
               <span style="width:92%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                 <span style="width:90%;overflow:hidden;">
-                  <span>{data.id} &#166; {data.text}</span>
+                  <span title={data.id}>{data.id} &#166; {data.text}</span>
                 </span>
                 <span style="width:10%; text-align:right;">
                   <p on-click={ () => this.radioClick(node, data) }><i class="el-icon-circle-check"></i></p>
                 </span>
               </span>
-              // <el-radio v-model="1" label="{data.id}">{data.text}</el-radio>
               );
             }
             else{
               return (
               <span style="width:92%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                 <span style="width:90%;overflow:hidden;">
-                  <span>{data.id} &#166; {data.text}</span>
+                  <span title={data.id}>{data.id} &#166; {data.text}</span>
                 </span>
                 <span style="width:10%; text-align:right;">
                   <p on-click={ () => this.radioClick(node, data) }> <i class="el-icon-circle-check"></i></p>
                 </span>
               </span>
-              // <el-radio v-model="1" label="{data.id}">{data.text}</el-radio>
               );
             }
           }
@@ -465,7 +465,7 @@
             return (
               <span style="width:92%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                 <span style="width:90%;overflow:hidden;">
-                  <span>{data.text}</span>
+                  <span title={data.id}>{data.text}</span>
                 </span>
                 <span style="width:10%; text-align:right;">
                   <p on-click={ () => this.radioClick(node, data) }> <i class="el-icon-circle-check"></i></p>
