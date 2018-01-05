@@ -48,7 +48,9 @@
 </template>
 
 <style>
-.inputWidth{width:500px; height:44px;overflow-y: auto;}
+.inputWidth{width:500px; height:44px;overflow: auto;}
+.el-select__tags{top:50%;}
+.el-tag.el-tag--primary{display:inline;}
 .el-tree{max-height: 500px; overflow-y: auto;}
 .newinput{margin-top:20px; margin-bottom:-1px;}
 .hidden,.el-input__icon.el-icon-caret-top{display:none;}
