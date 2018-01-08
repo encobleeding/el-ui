@@ -1,5 +1,5 @@
 <template id="treenews">
-  <section class="form-section" @click.self="clickcourse()">
+  <section class="form-section" @click.self="clickcourse()" :id="fiterID.id">
   <el-select
     v-model="value5"
     multiple
@@ -48,7 +48,8 @@
 </template>
 
 <style>
-.inputWidth{width:500px; height:44px;overflow: auto;}
+.inputWidth{width:500px; height:44px;overflow: auto; border:1px solid #e4e4e4; background-color: #fff;}
+.inputWidth .el-input input{border:0;}
 .el-select__tags{top:50%;}
 .el-tag.el-tag--primary{display:inline;}
 .el-tree{max-height: 500px; overflow-y: auto;}
@@ -769,7 +770,7 @@
     },
     beforeDestroy() {
       document.body.removeEventListener('click', this.bodyListener)
-      document.body.removeEventListener('keyup', this.bodyKeyListener)
+     //  document.body.removeEventListener('keyup', this.bodyKeyListener)
     },
   };
 </script>

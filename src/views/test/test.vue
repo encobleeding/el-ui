@@ -1,7 +1,6 @@
 <template>
 <section>
   <v-tree :fiterID="fiterID"></v-tree>
-  <v-tree2 :fiterID="fiterID"></v-tree2>
 </section>
 </template>
 
@@ -20,14 +19,14 @@
           "defaultdisabled": [], // 默认禁用'01000700'
           "onLeaf": true, // true为不可单独选根节点,false为可单独选根节点,仅在checkbox生效
           "leafCheck": false, // true为提交根节点，false为不可提交，,仅在checkbox生效
-          'isCheck': true // true为复选框,false为单选框
+          'isCheck': true, // true为复选框,false为单选框
+          'id': 'testid'
         }
       };
     },
     methods: {},
     components: {
-      'v-tree': newtree,
-      'v-tree2': newtree
+      'v-tree': newtree
     },
     beforeCreate: function () {
     },
