@@ -6,8 +6,7 @@
     @remove-tag="removeTag"
     popper-class="hidden"
     @visible-change="showtree"
-    @change="showtree"
-    @focus="showtree"
+    @change="showtree2"
     default-first-option
     placeholder="请选择以下条目"
     :tid="fiterID.id"
@@ -18,11 +17,11 @@
 
   <el-input
     placeholder="输入ID,汉字，拼音字母，五笔字母可以查询"
-    v-model="filterText"
+    v-model.trim="filterText"
     v-show="seen"
     @keyup.up.native="keyupEvent()"
     @keyup.down.native="keyupEvent()"
-    @keyup.enter.native="keyupEvent()"
+    @keyup.space.native="keyupEvent()"
     :autofocus = true
     :focus= "seen"
     class="newinput">
@@ -59,7 +58,10 @@
 #newtree .el-tag.el-tag--primary{display:inline;}
 #newtree .el-tree{max-height: 500px; overflow: hidden; overflow-y: auto}
 #newtree .newinput{margin-top:20px; margin-bottom:-1px;}
-#newtree .hidden,.el-input__icon.el-icon-caret-top,.el-select-dropdown__empty,.el-select-dropdown {display:none;}
+#newtree .hidden {display:none;}
+#newtree .el-input__icon.el-icon-caret-top {display:none;}
+.el-select-dropdown__empty{display: none!important;}
+.el-select-dropdown{display:none!important;}
 #newtree .el-icon-check,.el-icon-circle-check{opacity: 0;}
 #newtree .el-tree-node__content:hover .el-icon-check{opacity: 100;}
 #newtree .el-tree-node__content:hover .el-icon-circle-check{opacity: 100;}
@@ -182,7 +184,7 @@
         }
       },
       radiohandleNodeClick(data, node) { //节点点击
-        if(this.fiterID.isCheck){ //复选
+        if(this.fiterID.isCheck && !data.disabled){ //复选
           if(data.children){}
           else{
             let _divArr = document.getElementsByClassName('el-tree-node')
@@ -198,7 +200,7 @@
             }
           }
         }
-        else{ //单选模式 
+        else if(this.fiterID.isCheck == false && !data.disabled){ //单选模式 
           let _divArr = document.getElementsByClassName('el-tree-node')
           let divLength = _divArr.length-1
           for(let i = 0; i <= divLength; i++){
@@ -221,6 +223,8 @@
       },
       showtree() {
         this.seen = true
+      },
+      showtree2() {
       },
       handleNodeCheckClick(node, data, store) { // 复选框事件
         let _divArr = document.getElementsByClassName('el-tree-node')
@@ -460,7 +464,7 @@
           }
         } else { //单选框模式
           if(this.fiterID.labeltxt[0] == 'id' && this.fiterID.labeltxt[1] == 'text'){  //显示id与文本
-            if(node.checked){
+            if(node.checked && data.children == undefined){
               return (
               <span style="width:92%; flex: 1; display:inline-flex; align-items: center; justify-content: space-between; font-size: 14px; padding-right: 8px;">
                 <span style="width:90%;overflow:hidden;">
@@ -546,10 +550,20 @@
       ddget3(firstdata,newdata2) { // 默认禁用
         newdata2.forEach((value, index, array) => {
           for(let j = 0; j< firstdata.length; j++) {
-              if(value.id == firstdata[j]) {
+             let type = isNaN(firstdata[j])
+             if(type){
+               if(value.id == firstdata[j]) {
                 this.getdisableid.push(value.id)
                 value.disabled = true
               }
+             }
+             else{
+               let reg = new RegExp(firstdata[j]);
+                if(reg.test(value.id)){
+                  value.disabled = true
+                }
+             }
+              
           }
           if(value.children !== '' && value.children !== undefined) {
             this.ddget3(firstdata,value.children)
@@ -564,16 +578,20 @@
         });
       },
       radioClick(node, data) {
-        data.checked = true
-        let _divArr = document.getElementsByClassName('el-tree-node');
-        let divLength = _divArr.length-1;  
-        for(let i = 0; i <= divLength; i++){
-          _divArr[i].firstChild.childNodes[3].childNodes[1].firstChild.firstChild.class = "el-icon-circle-check"
+        if(!data.disabled){
+          event.cancelBubble = true;
+          data.checked = true
+          let _divArr = document.getElementsByClassName('el-tree-node');
+          let divLength = _divArr.length-1;  
+          for(let i = 0; i <= divLength; i++){
+            if(_divArr[i].firstChild.childNodes[3].childNodes[1] !== undefined)_divArr[i].firstChild.childNodes[3].childNodes[1].firstChild.firstChild.class = "el-icon-circle-check"
+            
+          }
+          this.value5 = []
+          this.value5.push(data.text)
+          this.value5id = []
+          this.value5id.push({'txt':data.text, 'id':data.id})
         }
-        this.value5 = []
-        this.value5.push(data.text)
-        this.value5id = []
-        this.value5id.push({'txt':data.text, 'id':data.id})
       },
       clickcourse() {
         this.seen = false
@@ -624,7 +642,7 @@
           }
           // thedom.scrollTop = thedom.scrollTop + currentLine / 10 * 36
         }
-        else if(e.keyCode == 13 && currentLine > 0){
+        else if(e.keyCode == 32 && currentLine > 0){
           it[currentLine].classList.add('is-current')
           let treuid = it[currentLine].firstChild.childNodes[3].firstChild.firstChild.getAttribute("title")
           if(this.fiterID.isCheck){
@@ -632,7 +650,8 @@
             let checkbglen = checkbg.length-1
             for(let i=0; i <= checkbglen; i++){
               let haschecked = checkbg[i].classList.contains("is-current")
-                if(haschecked){
+              let isdisable = checkbg[i].firstChild.childNodes[1].firstChild.childNodes[1].getAttribute("disabled")
+                if(haschecked && isdisable !== "disabled"){
                   let hasenter = checkbg[i].firstChild.getAttribute("has") == "has" ? true : false
                     let getids = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.getAttribute("title")
                     if(hasenter){
@@ -662,6 +681,11 @@
             let checkbg = thedom.querySelectorAll('.el-tree-node');
             let checkbglen = checkbg.length-1
             for(let i=0; i <= checkbglen; i++){
+              checkbg[i].classList.remove(".is-current")
+              let rmovetags = checkbg[i].firstChild.childNodes[3].childNodes[1].firstChild.childNodes[1]
+              if(rmovetags !== undefined) {
+                rmovetags.classList.remove('iconcehck')
+              }
               let haschecked = checkbg[i].classList.contains("is-current")
               if(haschecked){
                 let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
@@ -734,6 +758,9 @@
       this.bodyListener = (e) => {
         let thisdom =e.target.parentNode.parentNode.childNodes[1].childNodes[2]
         if(e.target == thisdom){
+          // e.target.parentNode.parentNode.parentNode.childNodes[2].style.display = "block"
+          // e.target.parentNode.parentNode.parentNode.childNodes[4].style.display = "block"
+          // e.target.parentNode.parentNode.parentNode.childNodes[6].style.display = "block"
           e.target.parentNode.parentNode.parentNode.childNodes[2].childNodes[2].focus()
         }
         else{

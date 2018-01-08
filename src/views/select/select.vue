@@ -9,7 +9,7 @@
     </el-option>
   </el-select>
 
-  <el-select v-model="value8" filterable multiple placeholder="请选择2">
+  <el-select v-model="value9" filterable multiple placeholder="请选择2">
     <el-option
       v-for="item in options"
       :key="item.id"
@@ -36,7 +36,8 @@
         ],
         value5: [],
         value11: [],
-        value8: ''
+        value8: '',
+        value9: ''
       }
     },
     methods: {
