@@ -1,5 +1,5 @@
 <template id="treenews">
-  <section class="form-section" @click.self="clickcourse()" :id="fiterID.id">
+  <section class="form-section theonly" @click.self="clickcourse()" :tid="fiterID.id" id="newtree">
   <el-select
     v-model="value5"
     multiple
@@ -10,6 +10,7 @@
     @focus="showtree"
     default-first-option
     placeholder="请选择以下条目"
+    :tid="fiterID.id"
     class="inputWidth">
   </el-select>
 
@@ -20,6 +21,10 @@
     v-model="filterText"
     v-show="seen"
     @keyup.up.native="keyupEvent()"
+    @keyup.down.native="keyupEvent()"
+    @keyup.enter.native="keyupEvent()"
+    :autofocus = true
+    :focus= "seen"
     class="newinput">
   </el-input>
 
@@ -48,27 +53,33 @@
 </template>
 
 <style>
-.inputWidth{width:500px; height:44px;overflow: auto; border:1px solid #e4e4e4; background-color: #fff;}
-.inputWidth .el-input input{border:0;}
-.el-select__tags{top:50%;}
-.el-tag.el-tag--primary{display:inline;}
-.el-tree{max-height: 500px; overflow-y: auto;}
-.newinput{margin-top:20px; margin-bottom:-1px;}
-.hidden,.el-input__icon.el-icon-caret-top{display:none;}
-.el-icon-check,.el-icon-circle-check{opacity: 0;}
-.el-tree-node__content:hover .el-icon-check{opacity: 100;}
-.el-tree-node__content:hover .el-icon-circle-check{opacity: 100;}
-.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{background-color: #e4e8f1;}
-.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .el-icon-circle-check{color:#20a0ff; opacity: 100;}
-.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .el-icon-check{color:#20a0ff; opacity: 100;}
-.bgclass{background-color:#fff;}
-.bgclasshover{background-color:#20afff;}
-.iconcehck{opacity: 100; color:#20afff;}
-.form-section{float: left;}
+#newtree .inputWidth{width:500px; height:44px;overflow: auto; border:1px solid #e4e4e4; background-color: #fff;}
+#newtree .inputWidth .el-input input{border:0;}
+#newtree .el-select__tags{top:50%;}
+#newtree .el-tag.el-tag--primary{display:inline;}
+#newtree .el-tree{max-height: 500px; overflow: hidden; overflow-y: auto}
+#newtree .newinput{margin-top:20px; margin-bottom:-1px;}
+#newtree .hidden,.el-input__icon.el-icon-caret-top,.el-select-dropdown__empty,.el-select-dropdown {display:none;}
+#newtree .el-icon-check,.el-icon-circle-check{opacity: 0;}
+#newtree .el-tree-node__content:hover .el-icon-check{opacity: 100;}
+#newtree .el-tree-node__content:hover .el-icon-circle-check{opacity: 100;}
+#newtree .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{background-color: #e4e8f1;}
+#newtree .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .el-icon-circle-check{color:#20a0ff; opacity: 100;}
+#newtree .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content .el-icon-check{color:#20a0ff; opacity: 100;}
+#newtree .bgclass{background-color:#fff;}
+#newtree .bgclasshover{background-color:#20afff;}
+#newtree .iconcehck{opacity: 100; color:#20afff;}
+#newtree .form-section{float: left;}
+#newtree .ListHighLight{background: #e4e8f1;}
+#newtree.theonly{float: left;}
+.content-wrapper:after{content: "\0020";display: block;height: 0;clear: both;}
 </style>
 <script type="text/jsx">
   import axios from 'axios'
   import _ from 'lodash'
+  let currentLine = 0
+  let offsetTr = 0
+
   export default {
     watch: {
       filterText(val) {
@@ -174,6 +185,11 @@
         if(this.fiterID.isCheck){ //复选
           if(data.children){}
           else{
+            let _divArr = document.getElementsByClassName('el-tree-node')
+            let divLength = _divArr.length-1
+            for(let i = 0; i <= divLength; i++){
+            _divArr[i].classList.remove('is-current')
+            }
             if(node.checked){
               node.checked = false
             }
@@ -183,10 +199,11 @@
           }
         }
         else{ //单选模式 
-          let _divArr = document.getElementsByClassName('el-tree-node');
-          let divLength = _divArr.length-1;  
+          let _divArr = document.getElementsByClassName('el-tree-node')
+          let divLength = _divArr.length-1
           for(let i = 0; i <= divLength; i++){
-           //  _divArr[i].firstChild.childNodes[3].childNodes[1].firstChild.firstChild.class=""
+          //  _divArr[i].firstChild.childNodes[3].childNodes[1].firstChild.firstChild.class=""
+           _divArr[i].classList.remove('is-current')
           }
           this.value5 = []
           this.value5.push(data.text)
@@ -206,6 +223,12 @@
         this.seen = true
       },
       handleNodeCheckClick(node, data, store) { // 复选框事件
+        let _divArr = document.getElementsByClassName('el-tree-node')
+        let divLength = _divArr.length-1
+        for(let i = 0; i <= divLength; i++){
+          _divArr[i].classList.remove('is-current')
+        }
+
         let isleafCheck = this.fiterID.leafCheck
         if(isleafCheck){ //根节点需要提交
           if(data) {
@@ -360,9 +383,6 @@
             this.value5id.splice(i, 1)
           }
         }
-      },
-      keyupEvent: function () {
-         // this.open("tips","你按了上键！")
       },
       renderContent(h, { node, data, store, fitter}) {
         fitter = RegExp(this.fiterID.filterid)
@@ -571,6 +591,114 @@
             this.ddgetclear(value.children)
           }
         });
+      },
+      keyupEvent() {
+        let e = window.event||e
+        let thedom =e.target.parentNode.parentNode.childNodes[4]
+        // let it = document.getElementsByClassName('el-tree-node')
+        let it = thedom.querySelectorAll('.el-tree-node:not(.is-hidden)')
+        for(let i = 0; i < it.length; i++){
+            it[i].classList.remove('is-current')
+        }
+        if(e.keyCode == 38){
+          currentLine --
+          if(currentLine<0) currentLine = it.length-1
+          if(currentLine >= it.length) currentLine = it.length-1
+          it[currentLine].classList.add('is-current')
+          if(currentLine>=14) {
+            thedom.scrollTop = it[currentLine].offsetTop -200}
+          else{
+            thedom.scrollTop = 0
+          }
+          // thedom.scrollTop = thedom.scrollTop + currentLine / 10 * 36
+        }
+        else if(e.keyCode == 40){
+          currentLine ++
+          if(currentLine < 0) currentLine = it.length-1
+          if(currentLine >= it.length) currentLine = 0
+          it[currentLine].classList.add('is-current')
+          if(currentLine>=14){
+            thedom.scrollTop = it[currentLine].offsetTop -200}
+          else{
+            thedom.scrollTop = 0
+          }
+          // thedom.scrollTop = thedom.scrollTop + currentLine / 10 * 36
+        }
+        else if(e.keyCode == 13 && currentLine > 0){
+          it[currentLine].classList.add('is-current')
+          let treuid = it[currentLine].firstChild.childNodes[3].firstChild.firstChild.getAttribute("title")
+          if(this.fiterID.isCheck){
+            let checkbg = thedom.querySelectorAll('.el-tree-node');
+            let checkbglen = checkbg.length-1
+            for(let i=0; i <= checkbglen; i++){
+              let haschecked = checkbg[i].classList.contains("is-current")
+                if(haschecked){
+                  let hasenter = checkbg[i].firstChild.getAttribute("has") == "has" ? true : false
+                    let getids = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.getAttribute("title")
+                    if(hasenter){
+                      checkbg[i].firstChild.setAttribute("has","no")
+                      for(let i = 0; i < this.getchekcid.length; i++){
+                        if(this.getchekcid[i] == getids){
+                          this.$refs.tree.setChecked (this.getchekcid[i], false)
+                          this.getchekcid.splice(i, 1)
+                        }
+                      }
+                    }
+                    else{
+                      let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
+                      if(ishaschild == null) {
+                        checkbg[i].firstChild.setAttribute("has","has")
+                        if(this.getchekcid.indexOf(getids) == -1) this.getchekcid.push(getids)
+                        this.$refs.tree.setChecked (getids, true)
+                      }
+                      else{
+                      }
+                    }
+                }
+            }
+          }
+          else{
+            // 单选模式
+            let checkbg = thedom.querySelectorAll('.el-tree-node');
+            let checkbglen = checkbg.length-1
+            for(let i=0; i <= checkbglen; i++){
+              let haschecked = checkbg[i].classList.contains("is-current")
+              if(haschecked){
+                let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
+                let checkdom=[]
+                checkdom.push(checktxt)
+                let convTxt = checkdom[0].data
+                if(convTxt.indexOf("¦") > 0){
+                  let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
+                  let getids = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.getAttribute("title")
+                  let getidstxt = convTxt.split("¦")[1].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+                  if(ishaschild == null){
+                    this.getchekcid = []
+                    this.value5 = []
+                    this.value5.push(getidstxt)
+                    this.value5id = []
+                    this.getchekcid.push(getids)
+                    this.$refs.tree.setChecked (getids, true)
+                    // this.$refs.tree.setCheckedKeys(this.getchekcid);
+                  }
+                  else{
+                    this.value5 = []
+                    this.value5.push(getidstxt)
+                    this.value5id = []
+                    this.value5id.push({'txt':getidstxt, 'id':getids})
+                  }
+                }
+                else{
+                  //没有获取到ID情况
+                }
+              }
+              else{
+                //没有进入键盘选中事件
+              }
+            }
+          }
+        }
+        return false
       }
     },
     props: [
@@ -602,171 +730,178 @@
       // this.idtoObj3(this.fiterID.defaultdisabled) // 默认禁用
     },
     mounted () {
-      let tdIndex = 0; 
+      let tdIndex = 0;
       this.bodyListener = (e) => {
+        let thisdom =e.target.parentNode.parentNode.childNodes[1].childNodes[2]
+        if(e.target == thisdom){
+          e.target.parentNode.parentNode.parentNode.childNodes[2].childNodes[2].focus()
+        }
+        else{
+        }
         if (e.target == document.body.getElementsByClassName("content-wrapper")[0]){
           this.seen = false
           tdIndex = 0
+          currentLine = 0
           let _divArr = document.getElementsByClassName('el-tree-node');
           let divLength = _divArr.length-1; 
           for (var i=0;i<=divLength;i++) {
-            document.querySelectorAll('.el-tree-node')[i].firstChild.style.backgroundColor = '#fff'
+            document.querySelectorAll('.el-tree-node')[i].classList.remove('is-current')
           }
         }
       }
       document.body.addEventListener('click', this.bodyListener, false)
       // let i=0;
        
-      this.bodyKeyListener = (e) => {
-        let isqd = this.seen
-        if(isqd){
-        let _divArr = document.getElementsByClassName('el-tree-node');
-        let divLength = _divArr.length-1;  
-        for(let i = 0; i <= divLength; i++){
-          _divArr[i].setAttribute("id","set" + i)  
-        }
-         if (e.keyCode === 38){
+      // this.bodyKeyListener = (e) => {
+      //   let isqd = this.seen
+      //   if(isqd){
+      //   let _divArr = document.getElementsByClassName('el-tree-node');
+      //   let divLength = _divArr.length-1;  
+      //   for(let i = 0; i <= divLength; i++){
+      //     _divArr[i].setAttribute("id","set" + i)  
+      //   }
+      //    if (e.keyCode === 38){
            
-          for (var i=0;i<=divLength;i++) {
-            document.getElementById('set'+ i).firstChild.style.backgroundColor = '#fff'
-          }
-          if (tdIndex==0) {
-            document.getElementById("set" + 0).firstChild.style.backgroundColor = "#e4e8f1"
-            this.open("tips","已经到顶了！")
-            return false;
-          }
-          else {
-            tdIndex -= 1; 
-            document.getElementById('set'+ tdIndex).firstChild.style.backgroundColor = '#e4e8f1'
-          }
-         }
-         if (e.keyCode === 40){
+      //     for (var i=0;i<=divLength;i++) {
+      //       document.getElementById('set'+ i).firstChild.style.backgroundColor = '#fff'
+      //     }
+      //     if (tdIndex==0) {
+      //       document.getElementById("set" + 0).firstChild.style.backgroundColor = "#e4e8f1"
+      //       this.open("tips","已经到顶了！")
+      //       return false;
+      //     }
+      //     else {
+      //       tdIndex -= 1; 
+      //       document.getElementById('set'+ tdIndex).firstChild.style.backgroundColor = '#e4e8f1'
+      //     }
+      //    }
+      //    if (e.keyCode === 40){
            
-            for (var i=0;i<=divLength;i++) {
-               document.getElementById('set'+ i).firstChild.style.backgroundColor = '#fff'
-            }
-            if (tdIndex>=divLength) {
-              this.open("tips","已经到底了！")
-              document.getElementById("set" + divLength).firstChild.style.backgroundColor = "#e4e8f1"
-              return false
-            }
-            else {
-              tdIndex += 1 
-              document.getElementById('set'+ tdIndex).firstChild.style.backgroundColor = '#e4e8f1'
-            }
+      //       for (var i=0;i<=divLength;i++) {
+      //          document.getElementById('set'+ i).firstChild.style.backgroundColor = '#fff'
+      //       }
+      //       if (tdIndex>=divLength) {
+      //         this.open("tips","已经到底了！")
+      //         document.getElementById("set" + divLength).firstChild.style.backgroundColor = "#e4e8f1"
+      //         return false
+      //       }
+      //       else {
+      //         tdIndex += 1 
+      //         document.getElementById('set'+ tdIndex).firstChild.style.backgroundColor = '#e4e8f1'
+      //       }
 
-            // let Zdom = document.getElementsByClassName("el-tree")[0]
-            // let childlen = Zdom.childNodes.length
-            // if(i<=1){
-            //   let getids = Zdom.innerText.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-            //   if(this.getopenid.indexOf(getids) == -1) this.getopenid.push(getids)
-            //   Zdom.firstChild.firstChild.style.backgroundColor = "#FFCC80";
-            // }
-            // else{
-            //   Zdom.firstChild.firstChild.style.backgroundColor = "#fff";
-            //   if(i-childlen>childlen){
-            //     Zdom.firstChild.childNodes[1].childNodes[childlen-1].style.backgroundColor = "#FFCC80";
-            //   }
-            //   else{
-            //     Zdom.firstChild.childNodes[1].childNodes[i-childlen].style.backgroundColor = "#FFCC80";
-            //     Zdom.firstChild.childNodes[1].childNodes[i-childlen-1].style.backgroundColor = "#fff";
-            //   }
-            // }
-         }
-         if (e.keyCode === 13){
-           if(this.fiterID.isCheck){
-              let checkbg = document.querySelectorAll('.el-tree-node');
-              let checkbglen = checkbg.length-1
-              for(let i=0; i <= checkbglen; i++){
-                // let hasenter = false
-                let haschecked = checkbg[i].firstChild.childNodes[1].firstChild.classList.contains("is-checked")
-                  if(checkbg[i].firstChild.style.backgroundColor == "rgb(228, 232, 241)"){
-                    let hasenter = checkbg[i].firstChild.getAttribute("has") == "has" ? true : false
-                    let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
-                    let checkdom=[]
-                    checkdom.push(checktxt)
-                    let convTxt = checkdom[0].data
-                    if(convTxt.indexOf("¦") > 0){
-                      let getids = convTxt.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-                      if(hasenter){
-                        checkbg[i].firstChild.setAttribute("has","no")
-                        // let index = this.getchekcid.indexOf(getids);
-                        // if (index > -1)  this.getchekcid.splice(index, 1)
-                        // let newarry = this.getchekcid
-                        // this.$refs.tree.setCheckedKeys(newarry);
+      //       // let Zdom = document.getElementsByClassName("el-tree")[0]
+      //       // let childlen = Zdom.childNodes.length
+      //       // if(i<=1){
+      //       //   let getids = Zdom.innerText.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+      //       //   if(this.getopenid.indexOf(getids) == -1) this.getopenid.push(getids)
+      //       //   Zdom.firstChild.firstChild.style.backgroundColor = "#FFCC80";
+      //       // }
+      //       // else{
+      //       //   Zdom.firstChild.firstChild.style.backgroundColor = "#fff";
+      //       //   if(i-childlen>childlen){
+      //       //     Zdom.firstChild.childNodes[1].childNodes[childlen-1].style.backgroundColor = "#FFCC80";
+      //       //   }
+      //       //   else{
+      //       //     Zdom.firstChild.childNodes[1].childNodes[i-childlen].style.backgroundColor = "#FFCC80";
+      //       //     Zdom.firstChild.childNodes[1].childNodes[i-childlen-1].style.backgroundColor = "#fff";
+      //       //   }
+      //       // }
+      //    }
+      //    if (e.keyCode === 13){
+      //      if(this.fiterID.isCheck){
+      //         let checkbg = document.querySelectorAll('.el-tree-node');
+      //         let checkbglen = checkbg.length-1
+      //         for(let i=0; i <= checkbglen; i++){
+      //           // let hasenter = false
+      //           let haschecked = checkbg[i].firstChild.childNodes[1].firstChild.classList.contains("is-checked")
+      //             if(checkbg[i].firstChild.style.backgroundColor == "rgb(228, 232, 241)"){
+      //               let hasenter = checkbg[i].firstChild.getAttribute("has") == "has" ? true : false
+      //               let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
+      //               let checkdom=[]
+      //               checkdom.push(checktxt)
+      //               let convTxt = checkdom[0].data
+      //               if(convTxt.indexOf("¦") > 0){
+      //                 let getids = convTxt.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+      //                 if(hasenter){
+      //                   checkbg[i].firstChild.setAttribute("has","no")
+      //                   // let index = this.getchekcid.indexOf(getids);
+      //                   // if (index > -1)  this.getchekcid.splice(index, 1)
+      //                   // let newarry = this.getchekcid
+      //                   // this.$refs.tree.setCheckedKeys(newarry);
 
-                        for(let i = 0; i < this.getchekcid.length; i++){
-                          if(this.getchekcid[i] == getids){
-                            this.$refs.tree.setChecked (this.getchekcid[i], false)
-                            this.getchekcid.splice(i, 1)
-                          }
-                        }
+      //                   for(let i = 0; i < this.getchekcid.length; i++){
+      //                     if(this.getchekcid[i] == getids){
+      //                       this.$refs.tree.setChecked (this.getchekcid[i], false)
+      //                       this.getchekcid.splice(i, 1)
+      //                     }
+      //                   }
                         
-                      }
-                      else{
-                        let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
-                        if(ishaschild == null) {
-                          checkbg[i].firstChild.setAttribute("has","has")
-                          if(this.getchekcid.indexOf(getids) == -1) this.getchekcid.push(getids)
-                          this.$refs.tree.setChecked (getids, true)
-                        }
-                        else{
-                        }
-                        // this.$refs.tree.setCheckedKeys(this.getchekcid);
-                      }
-                    }
-                    else{
-                      //没有ID情况
-                    }
-                  }
-                  else{
-                    //没有选中
-                  }
-              }
-           }
-           else{
-             // 单选模式
-              let checkbg = document.querySelectorAll('.el-tree-node');
-              let checkbglen = checkbg.length-1
-              for(let i=0; i <= checkbglen; i++){
-                if(checkbg[i].firstChild.style.backgroundColor == "rgb(228, 232, 241)"){
-                  let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
-                  let checkdom=[]
-                  checkdom.push(checktxt)
-                  let convTxt = checkdom[0].data
-                  if(convTxt.indexOf("¦") > 0){
-                    let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
-                    let getids = convTxt.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-                    let getidstxt = convTxt.split("¦")[1].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-                    if(ishaschild == null){
-                      this.getchekcid = []
-                      this.value5 = []
-                      this.value5.push(getidstxt)
-                      this.value5id = []
-                      this.getchekcid.push(getids)
-                      this.$refs.tree.setChecked (getids, true)
-                      // this.$refs.tree.setCheckedKeys(this.getchekcid);
-                    }
-                    else{
-                      this.value5 = []
-                      this.value5.push(getidstxt)
-                      this.value5id = []
-                      this.value5id.push({'txt':getidstxt, 'id':getids})
-                    }
-                  }
-                  else{
-                    //没有获取到ID情况
-                  }
-                }
-                else{
-                  //没有进入键盘选中事件
-                }
-              }
-           }
-         }
-      }
-      }
-      document.body.addEventListener('keyup', this.bodyKeyListener, false)
+      //                 }
+      //                 else{
+      //                   let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
+      //                   if(ishaschild == null) {
+      //                     checkbg[i].firstChild.setAttribute("has","has")
+      //                     if(this.getchekcid.indexOf(getids) == -1) this.getchekcid.push(getids)
+      //                     this.$refs.tree.setChecked (getids, true)
+      //                   }
+      //                   else{
+      //                   }
+      //                   // this.$refs.tree.setCheckedKeys(this.getchekcid);
+      //                 }
+      //               }
+      //               else{
+      //                 //没有ID情况
+      //               }
+      //             }
+      //             else{
+      //               //没有选中
+      //             }
+      //         }
+      //      }
+      //      else{
+      //        // 单选模式
+      //         let checkbg = document.querySelectorAll('.el-tree-node');
+      //         let checkbglen = checkbg.length-1
+      //         for(let i=0; i <= checkbglen; i++){
+      //           if(checkbg[i].firstChild.style.backgroundColor == "rgb(228, 232, 241)"){
+      //             let checktxt = checkbg[i].firstChild.childNodes[3].firstChild.firstChild.firstChild
+      //             let checkdom=[]
+      //             checkdom.push(checktxt)
+      //             let convTxt = checkdom[0].data
+      //             if(convTxt.indexOf("¦") > 0){
+      //               let ishaschild=checkbg[i].childNodes[1].firstChild //有子点则无法双击回车
+      //               let getids = convTxt.split("¦")[0].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+      //               let getidstxt = convTxt.split("¦")[1].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
+      //               if(ishaschild == null){
+      //                 this.getchekcid = []
+      //                 this.value5 = []
+      //                 this.value5.push(getidstxt)
+      //                 this.value5id = []
+      //                 this.getchekcid.push(getids)
+      //                 this.$refs.tree.setChecked (getids, true)
+      //                 // this.$refs.tree.setCheckedKeys(this.getchekcid);
+      //               }
+      //               else{
+      //                 this.value5 = []
+      //                 this.value5.push(getidstxt)
+      //                 this.value5id = []
+      //                 this.value5id.push({'txt':getidstxt, 'id':getids})
+      //               }
+      //             }
+      //             else{
+      //               //没有获取到ID情况
+      //             }
+      //           }
+      //           else{
+      //             //没有进入键盘选中事件
+      //           }
+      //         }
+      //      }
+      //    }
+      // }
+      // }
+      // document.body.addEventListener('keyup', this.bodyKeyListener, false)
     },
     beforeDestroy() {
       document.body.removeEventListener('click', this.bodyListener)

@@ -1,4 +1,5 @@
 <template>
+<section>
   <el-select v-model="value8" filterable multiple placeholder="请选择">
     <el-option
       v-for="item in options"
@@ -7,6 +8,16 @@
       :value="item.id">
     </el-option>
   </el-select>
+
+  <el-select v-model="value8" filterable multiple placeholder="请选择2">
+    <el-option
+      v-for="item in options"
+      :key="item.id"
+      :label="item.text"
+      :value="item.id">
+    </el-option>
+  </el-select>
+</section>
 </template>
 
 
