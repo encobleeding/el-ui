@@ -1,7 +1,7 @@
 <template id="treenews">
   <section class="form-section theonly" @click.self="clickcourse()" :tid="fiterID.id" id="newtree">
   <el-select
-    v-model="value5"
+    v-model="checkLabel"
     multiple
     @remove-tag="removeTag"
     popper-class="hidden"
@@ -207,10 +207,10 @@
           //  _divArr[i].firstChild.childNodes[3].childNodes[1].firstChild.firstChild.class=""
            _divArr[i].classList.remove('is-current')
           }
-          this.value5 = []
-          this.value5.push(data.text)
-          this.value5id = []
-          this.value5id.push({'txt':data.text, 'id':data.id})
+          this.checkLabel = []
+          this.checkLabel.push(data.text)
+          this.checkLabelid = []
+          this.checkLabelid.push({'txt':data.text, 'id':data.id})
         }
       },
       handleNodeoneClick(obj, node, data) {
@@ -222,7 +222,8 @@
         }
       },
       showtree() {
-        this.seen = true
+        this.seen = false
+        // this.seen = true
       },
       showtree2() {
       },
@@ -236,22 +237,22 @@
         let isleafCheck = this.fiterID.leafCheck
         if(isleafCheck){ //根节点需要提交
           if(data) {
-            if (this.value5.indexOf(node.text) == -1){
-            this.value5.push(node.text)
-            this.value5id.push({'txt':node.text, 'id':node.id})
+            if (this.checkLabel.indexOf(node.text) == -1){
+            this.checkLabel.push(node.text)
+            this.checkLabelid.push({'txt':node.text, 'id':node.id})
             }
           }
           else{
             let haschecArr = node.text
-            let index = this.value5.indexOf(haschecArr);
+            let index = this.checkLabel.indexOf(haschecArr);
             if (index > -1) {
-              this.value5.splice(index, 1)
+              this.checkLabel.splice(index, 1)
             }
             let hasidchecArr = node.id
-            this.value5id.forEach((value, index, array) => {
+            this.checkLabelid.forEach((value, index, array) => {
               let idindex = value.id.indexOf(hasidchecArr)
               if (idindex > -1) {
-                this.value5id.splice(index, 1)
+                this.checkLabelid.splice(index, 1)
               }
             });
           }
@@ -263,10 +264,10 @@
             if (isexits === -1) {
               this.result = node.text + ',' + this.result;
             }
-            let arryexits = this.value5.indexOf(node.text)
+            let arryexits = this.checkLabel.indexOf(node.text)
             if (arryexits === -1) {
-              this.value5.push(node.text)
-              this.value5id.push({'txt':node.text, 'id':node.id})
+              this.checkLabel.push(node.text)
+              this.checkLabelid.push({'txt':node.text, 'id':node.id})
             }
           } else {
             if(this.fiterID.onLeaf){
@@ -276,29 +277,29 @@
               let newResult = nowTxt.replace(reg, "");
               this.result = newResult
               let haschecArr = node.text
-              let index = this.value5.indexOf(haschecArr);
+              let index = this.checkLabel.indexOf(haschecArr);
               if (index > -1) {
-                this.value5.splice(index, 1)
+                this.checkLabel.splice(index, 1)
               }
               let hasidchecArr = node.id
-              this.value5id.forEach((value, index, array) => {
+              this.checkLabelid.forEach((value, index, array) => {
                 let idindex = value.id.indexOf(hasidchecArr)
                 if (idindex > -1) {
-                  this.value5id.splice(index, 1)
+                  this.checkLabelid.splice(index, 1)
                 }
               });
             } else {
               if(!node.justmeClick) {
                 let haschecArr = node.text
-                let index = this.value5.indexOf(haschecArr);
+                let index = this.checkLabel.indexOf(haschecArr);
                 if (index > -1) {
-                  this.value5.splice(index, 1)
+                  this.checkLabel.splice(index, 1)
                 }
                 let hasidchecArr = node.id
-                this.value5id.forEach((value, index, array) => {
+                this.checkLabelid.forEach((value, index, array) => {
                   let idindex = value.id.indexOf(hasidchecArr)
                   if (idindex > -1) {
-                    this.value5id.splice(index, 1)
+                    this.checkLabelid.splice(index, 1)
                   }
                 });
               } else {
@@ -321,9 +322,9 @@
         if (nowChildState){
             node.checked = true
             node.indeterminate = false
-            if(this.value5.indexOf(data.text) == -1){
-                this.value5.push(data.text)
-                this.value5id.push({'txt':data.text, 'id':data.id})
+            if(this.checkLabel.indexOf(data.text) == -1){
+                this.checkLabel.push(data.text)
+                this.checkLabelid.push({'txt':data.text, 'id':data.id})
             }
           } else if (!nowstate) {
           node.checked = true
@@ -334,9 +335,9 @@
               parentNode.indeterminate = true
               parentNode = parentNode.parent
           }
-          if(this.value5.indexOf(data.text) == -1){
-            this.value5.push(data.text)
-            this.value5id.push({'txt':data.text, 'id':data.id})
+          if(this.checkLabel.indexOf(data.text) == -1){
+            this.checkLabel.push(data.text)
+            this.checkLabelid.push({'txt':data.text, 'id':data.id})
           }
         } else {
           node.checked = false
@@ -354,15 +355,15 @@
             }
           }
           let haschecArr = node.data.text
-          let index = this.value5.indexOf(haschecArr);
+          let index = this.checkLabel.indexOf(haschecArr);
           if (index > -1) {
-            this.value5.splice(index, 1)
+            this.checkLabel.splice(index, 1)
           }
           let hasidchecArr = node.id
-          this.value5id.forEach((value, index, array) => {
+          this.checkLabelid.forEach((value, index, array) => {
             let idindex = value.id.indexOf(hasidchecArr)
             if (idindex > -1) {
-              this.value5id.splice(index, 1)
+              this.checkLabelid.splice(index, 1)
             }
           });
         }
@@ -381,10 +382,10 @@
       },
       removeTag(data) { //移除文本框标签
         let tabTxt = data.value
-        for(let i = 0; i < this.value5id.length; i++){
-          if(this.value5id[i].txt == tabTxt){
-            this.$refs.tree.setChecked (this.value5id[i].id, false)
-            this.value5id.splice(i, 1)
+        for(let i = 0; i < this.checkLabelid.length; i++){
+          if(this.checkLabelid[i].txt == tabTxt){
+            this.$refs.tree.setChecked (this.checkLabelid[i].id, false)
+            this.checkLabelid.splice(i, 1)
           }
         }
       },
@@ -513,8 +514,8 @@
         newdata2.forEach((value, index, array) => {
           for(let j = 0; j< firstdata.length; j++) {
               if(value.id == firstdata[j]) {
-                this.value5id.push({'txt':value.text, 'id':value.id})
-                this.value5.push(value.text)
+                this.checkLabelid.push({'txt':value.text, 'id':value.id})
+                this.checkLabel.push(value.text)
                 this.getchekcid.push(value.id)
               }
           }
@@ -587,10 +588,10 @@
             if(_divArr[i].firstChild.childNodes[3].childNodes[1] !== undefined)_divArr[i].firstChild.childNodes[3].childNodes[1].firstChild.firstChild.class = "el-icon-circle-check"
             
           }
-          this.value5 = []
-          this.value5.push(data.text)
-          this.value5id = []
-          this.value5id.push({'txt':data.text, 'id':data.id})
+          this.checkLabel = []
+          this.checkLabel.push(data.text)
+          this.checkLabelid = []
+          this.checkLabelid.push({'txt':data.text, 'id':data.id})
         }
       },
       clickcourse() {
@@ -698,18 +699,18 @@
                   let getidstxt = convTxt.split("¦")[1].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
                   if(ishaschild == null){
                     this.getchekcid = []
-                    this.value5 = []
-                    this.value5.push(getidstxt)
-                    this.value5id = []
+                    this.checkLabel = []
+                    this.checkLabel.push(getidstxt)
+                    this.checkLabelid = []
                     this.getchekcid.push(getids)
                     this.$refs.tree.setChecked (getids, true)
                     // this.$refs.tree.setCheckedKeys(this.getchekcid);
                   }
                   else{
-                    this.value5 = []
-                    this.value5.push(getidstxt)
-                    this.value5id = []
-                    this.value5id.push({'txt':getidstxt, 'id':getids})
+                    this.checkLabel = []
+                    this.checkLabel.push(getidstxt)
+                    this.checkLabelid = []
+                    this.checkLabelid.push({'txt':getidstxt, 'id':getids})
                   }
                 }
                 else{
@@ -740,8 +741,8 @@
         result: '',
         trueresult: '',
         seen: false,
-        value5: [],
-        value5id: [],
+        checkLabel: [],
+        checkLabelid: [],
         getchekcid: [],
         getopenid: [],
         getdisableid: []
@@ -902,18 +903,18 @@
       //               let getidstxt = convTxt.split("¦")[1].replace(/^\s\s*/, '').replace(/\s\s*$/, '')
       //               if(ishaschild == null){
       //                 this.getchekcid = []
-      //                 this.value5 = []
-      //                 this.value5.push(getidstxt)
-      //                 this.value5id = []
+      //                 this.checkLabel = []
+      //                 this.checkLabel.push(getidstxt)
+      //                 this.checkLabelid = []
       //                 this.getchekcid.push(getids)
       //                 this.$refs.tree.setChecked (getids, true)
       //                 // this.$refs.tree.setCheckedKeys(this.getchekcid);
       //               }
       //               else{
-      //                 this.value5 = []
-      //                 this.value5.push(getidstxt)
-      //                 this.value5id = []
-      //                 this.value5id.push({'txt':getidstxt, 'id':getids})
+      //                 this.checkLabel = []
+      //                 this.checkLabel.push(getidstxt)
+      //                 this.checkLabelid = []
+      //                 this.checkLabelid.push({'txt':getidstxt, 'id':getids})
       //               }
       //             }
       //             else{
