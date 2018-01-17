@@ -81,39 +81,56 @@ export default {
       let param = rule.param
       let required = rule.required
       if (required) {
-        dispatch('notNull', {rule, value, callback})
-        let returnValue = false
-        if (/^[+]?[1-9]+\d*$/i.test(value)) {
-          returnValue = true
-          value = parseInt(value)
-          if (param[0] !== undefined) {
-            returnValue = (value >= param[0]);
+        if (param) {
+          dispatch('notNull', {rule, value, callback})
+          let returnValue = false
+          if (/^[+]?[1-9]+\d*$/i.test(value)) {
+            returnValue = true
+            value = parseInt(value)
+            if (param[0] !== undefined) {
+              returnValue = (value >= param[0]);
+            }
+            if (param[1] !== undefined) {
+              returnValue = returnValue && (value <= param[1]);
+            }
           }
-          if (param[1] !== undefined) {
-            returnValue = returnValue && (value <= param[1]);
+          if (!returnValue) {
+            return callback(new Error(`请输入正确的自然数格式且值在 ${param[0]} 与 ${param[1]} 之间`))
+          } else {
+            return callback()
           }
-        }
-        if (!returnValue) {
-          return callback(new Error(`请输入正确的自然数格式且值在 ${param[0]} 与 ${param[1]} 之间`))
         } else {
-          return callback()
+          dispatch('notNull', {rule, value, callback})
+          if (!(/(^-?|^\+?|\d)\d+$/.test(value))) {
+            return callback(new Error(`请输入整数类型的数字格式`))
+          } else {
+            callback()
+          }
         }
       } else if (value) {
-        let returnValue = false
-        if (/^[+]?[1-9]+\d*$/i.test(value)) {
-          returnValue = true
-          value = parseInt(value)
-          if (param[0] !== undefined) {
-            returnValue = (value >= param[0]);
+        if (param) {
+          let returnValue = false
+          if (/^[+]?[1-9]+\d*$/i.test(value)) {
+            returnValue = true
+            value = parseInt(value)
+            if (param[0] !== undefined) {
+              returnValue = (value >= param[0]);
+            }
+            if (param[1] !== undefined) {
+              returnValue = returnValue && (value <= param[1]);
+            }
           }
-          if (param[1] !== undefined) {
-            returnValue = returnValue && (value <= param[1]);
+          if (!returnValue) {
+            return callback(new Error(`请输入正确的自然数格式且值在 ${param[0]} 与 ${param[1]} 之间`))
+          } else {
+            return callback()
           }
-        }
-        if (!returnValue) {
-          return callback(new Error(`请输入正确的自然数格式且值在 ${param[0]} 与 ${param[1]} 之间`))
         } else {
-          return callback()
+          if (!(/(^-?|^\+?|\d)\d+$/.test(value))) {
+            return callback(new Error(`请输入整数类型的数字格式`))
+          } else {
+            callback()
+          }
         }
       } else {
         callback()
@@ -328,6 +345,7 @@ export default {
             callback()
           }
         } else {
+          dispatch('notNull', {rule, value, callback})
           if (!(/(^-?|^\+?|\d)\d+$/.test(value))) {
             return callback(new Error(`请输入整数类型的数字格式`))
           } else {
