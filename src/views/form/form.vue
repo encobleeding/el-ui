@@ -1,8 +1,33 @@
 <template>
   <section class="form-section">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="待办事项" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
+      <el-form-item :label="title" prop="diy">
+        <el-input 
+        v-model="formData.diy"
+        placeholder="请输入内容"
+        clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="用户名" prop="name">
+        <el-input 
+        v-model="formData.name"
+        placeholder="请输入内容"
+        clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="passworld">
+        <el-input 
+        v-model="formData.id"
+        placeholder="请输入内容"
+        clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item label="身份证号" prop="id">
+        <el-input 
+        v-model="formData.passworld"
+        placeholder="请输入内容"
+        clearable>
+        </el-input>
       </el-form-item>
       <el-form-item label="事项类型" prop="type">
         <el-radio-group v-model="ruleForm.type">
@@ -66,6 +91,23 @@
 <script>
   export default {
     data() {
+      var validateDiy = (rule, value, callback) => {
+        console.log(rule)
+        if (!value) {
+          return callback(new Error('diy不能为空'));
+        }
+        setTimeout(() => {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            if (value < 18) {
+              callback(new Error('必须年满18岁'));
+            } else {
+              callback();
+            }
+          }
+        }, 1000);
+      };
       return {
         period: [
           {required: true, message: '请选择重复周期', trigger: 'change'}
@@ -88,8 +130,12 @@
         },
         forbidden: true,
         redStar: false,
+        title: '自定义内容',
         ruleForm: {
+          diy: '',
           name: '',
+          passworld: '',
+          id: '',
           type: '',
           way: [],
           date: '',
@@ -100,9 +146,20 @@
           other: '',
         },
         rules: {
+          diy: [
+            {required: true, validator: validateDiy, trigger: 'blur'}
+          ],
           name: [
-            {required: true, message: '请输入待办事项名称', trigger: 'blur'},
+            {required: true, message: '请输入用户名', trigger: 'blur'},
             {min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur'}
+          ],
+          passworld: [
+            {required: true, message: '请输入密码', trigger: 'blur'},
+            {min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur'}
+          ],
+          id: [
+            {required: true, message: '请输入身份证号', trigger: 'blur'},
+            {min: 18, max: 18, message: '长度在为 18 个字符', trigger: 'blur'}
           ],
           type: [
             {required: true, message: '请选择待办事项类型', trigger: 'change'}

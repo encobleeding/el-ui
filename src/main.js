@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import store from './store/store'; // vuex
 import VueRouter from 'vue-router';
 import axios from 'axios';
 import ElementUI from 'element-ui';
@@ -9,6 +10,7 @@ import App from './App';
 import Index from './views/index/index';
 import Table from './views/table/table';
 import Form from './views/form/form';
+import testForm from './views/testForm/testForm';
 import select from './views/select/select';
 // import tree from './views/tree/tree';
 import transfer from './views/transfer/transfer';
@@ -60,6 +62,7 @@ let routes = [
       // {path: '/editor', component: ue, name: 'editor', class: 'fa-plug'},
       {path: '/table', component: Table, name: 'table', class: 'fa-table'},
       {path: '/form', component: Form, name: 'form', class: 'fa-newspaper-o'},
+      {path: '/testForm', component: testForm, name: 'testForm', class: 'fa-plug'},
       {path: '/select', component: select, name: 'select', class: 'fa-plug'},
       {path: '/transfer', component: transfer, name: 'transfer', class: 'fa-plug'},
       {path: '/Cascader', component: Cascader, name: 'Cascader', class: 'fa-plug'},
@@ -73,6 +76,7 @@ let router = new VueRouter({
   routes
 });
 let app = new Vue({
-  router
+  router,
+  store
 }).$mount('#app');
 export default app;

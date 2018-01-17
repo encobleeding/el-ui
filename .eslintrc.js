@@ -26,5 +26,10 @@ module.exports = {
     "comma-dangle": [0, "never"],//最后一个逗号控制,
     "no-undef": 0,
     "no-constant-condition": 0,
+    "no-tabs":"off",
+    "no-mixed-spaces-and-tabs":"off",
+    "space-infix-ops":"off",
+    "no-unused-vars":"off",
+    "indent":"off"
   }
 }
