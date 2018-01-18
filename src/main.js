@@ -16,9 +16,12 @@ import select from './views/select/select';
 import transfer from './views/transfer/transfer';
 import Cascader from './views/Cascader/Cascader';
 import test from './views/test/test';
+import test2 from './views/test/test2';
 // import ue from './views/editor/editor';
 import 'font-awesome/css/font-awesome.min.css';
 import Mock from './mock/mock';
+import FormCommon from './util/form';
+import Tools from './util/tools';
 
 // import '../static/UE/ueditor.config.js'
 // import '../static/UE/ueditor.all.min.js'
@@ -32,6 +35,8 @@ Vue.use(VueRouter);// 安装路由功能
 Vue.use(VueRouter);
 Vue.prototype.$http = axios;
 Vue.use(ElementUI);
+Vue.use(FormCommon);
+Vue.use(Tools);
 Vue.prototype._ = _
 
 // 后端对比cookies判断是否登录，凡接口response的header带有x-auth-token的即未登录，跳转首页。
@@ -51,13 +56,12 @@ Vue.prototype._ = _
 //     return response
 //   });
 // });
-
 let routes = [
   {
     path: '/',
     component: App,
     children: [
-      {path: '/index', component: Index, name: 'index', class: 'fa-line-chart'},
+      // {path: '/index', component: Index, name: 'index', class: 'fa-line-chart'},
       // {path: '/tree', component: tree, name: 'tree', class: 'fa-plug'},
       // {path: '/editor', component: ue, name: 'editor', class: 'fa-plug'},
       {path: '/table', component: Table, name: 'table', class: 'fa-table'},
@@ -66,7 +70,8 @@ let routes = [
       {path: '/select', component: select, name: 'select', class: 'fa-plug'},
       {path: '/transfer', component: transfer, name: 'transfer', class: 'fa-plug'},
       {path: '/Cascader', component: Cascader, name: 'Cascader', class: 'fa-plug'},
-      {path: '/test', component: test, name: 'test', class: 'fa-plug'}
+      {path: '/test', component: test, name: 'test', class: 'fa-plug'},
+      {path: '/test2', component: test2, name: 'test2', class: 'fa-plug'}
     ]
   }
 ];

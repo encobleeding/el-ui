@@ -30,6 +30,9 @@ module.exports = {
     "no-mixed-spaces-and-tabs":"off",
     "space-infix-ops":"off",
     "no-unused-vars":"off",
-    "indent":"off"
+    "indent":"off",
+    "eqeqeq ":"off",
+    "no-redeclare":"off",
+    "no-useless-escape":"off"
   }
 }

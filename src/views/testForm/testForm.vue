@@ -1,7 +1,7 @@
 <template>
   <section class="form-section">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="150px" class="demo-ruleForm">
-      <el-form-item :label="title" prop="diy">
+      <el-form-item label="邮箱" prop="diy">
         <el-input 
         v-model="ruleForm.diy"
         placeholder="请输入内容">
@@ -38,10 +38,12 @@
         <el-button @click="changeForm()">新建/更改</el-button>
       </el-form-item>
     </el-form>
+    <!-- <v-table class="demo-table"></v-table> -->
   </section>
 </template>
 <script>
   import axios from 'axios'
+  import newtable from 'src/views/testForm/testTable'
   export default {
     data() {
 /**
@@ -57,24 +59,24 @@
       }
     }
  */
-      let validateDiy = (rule, value, callback) => {
-        this.$store.dispatch('validateDiy', {rule, value, callback})
-      }
-      let noMark = (rule, value, callback) => {
-        this.$store.dispatch('noMark', {rule, value, callback})
-      }
-      let naturalNumber = (rule, value, callback) => {
-        this.$store.dispatch('naturalNumber', {rule, value, callback})
-      }
-      let naturalNumberRange = (rule, value, callback) => {
-        this.$store.dispatch('naturalNumberRange', {rule, value, callback})
-      }
-      let numeric = (rule, value, callback) => {
-        this.$store.dispatch('numeric', {rule, value, callback})
-      }
-      let numericRange = (rule, value, callback) => {
-        this.$store.dispatch('numericRange', {rule, value, callback})
-      }
+      // let validateDiy = (rule, value, callback) => {
+      //   this.$store.dispatch('validateDiy', {rule, value, callback})
+      // }
+      // let noMark = (rule, value, callback) => {
+      //   this.$store.dispatch('noMark', {rule, value, callback})
+      // }
+      // let naturalNumber = (rule, value, callback) => {
+      //   this.$store.dispatch('naturalNumber', {rule, value, callback})
+      // }
+      // let naturalNumberRange = (rule, value, callback) => {
+      //   this.$store.dispatch('naturalNumberRange', {rule, value, callback})
+      // }
+      // let numeric = (rule, value, callback) => {
+      //   this.$store.dispatch('numeric', {rule, value, callback})
+      // }
+      // let numericRange = (rule, value, callback) => {
+      //   this.$store.dispatch('numericRange', {rule, value, callback})
+      // }
       // var validateDiy = (rule, value, callback) => {
       //   let param = rule.param
       //   let required = rule.required
@@ -323,7 +325,6 @@
       return {
         isChange: false,
         num: 1,
-        title: '年龄',
 		    url: 'static/json/formData.js',
         formData: {},            // 服务器拿回的表单的初始数据
         forceKey: ['diy', 'name'], // 强制上传的key值
@@ -336,21 +337,23 @@
         },
         rules: {
           diy: [
-            {required: true, validator: naturalNumberRange, trigger: 'blur,change', label: '年龄'}
+            {required: true, validator: this.email, trigger: 'blur,change', label: '年龄', param: [3]}
           ],
           name: [
-            {required: true, validator: naturalNumberRange, trigger: 'blur,change', param: [1, 10]}
+            {required: true, validator: this.naturalNumberRange, trigger: 'blur,change', param: [1, 10]}
           ],
           passworld: [
             {required: true, message: '请输入密码', trigger: 'blur,change'},
             {min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur,change'}
           ],
           id: [
-            {required: false, message: '请输入身份证号', trigger: 'blur,change'},
-            {min: 5, max: 5, message: '长度在为 5 个字符', trigger: 'blur,change'}
+            {required: false, validator: this.sfzh, trigger: 'blur,change'}
           ]
         }
       };
+    },
+    components: {
+      'v-table': newtable
     },
     methods: {
       getData(isChange) {
@@ -392,19 +395,27 @@
                 }
               }
             }
-            console.log(update); // 提交修改和指定提交的数据
+            // console.log(update); // 提交修改和指定提交的数据
+            this.$store.state.formValidate.formData.push(update)
+            // console.log(this.$store.state.formValidate.formData)
             this.$message({
               message: "修改成功，请在控制台查看json!！",
               type: 'success'
             });
           } else if (valid && !isChange) {  // 填入新的数据
-            let para = Object.assign({}, this.ruleForm);
-            for (let item in para) {
-              if (!para[item]) {
-                delete para[item]
+            let newpara = this.ruleForm
+            let update = {}
+            for (let i=0; i<this.forceKey.length; i++) {
+              for (let item in newpara) {
+                if (this.forceKey[i] === item) {
+                  update[item] = newpara[item]
+                } else if (newpara[item]) {
+                  update[item] = newpara[item]
+                }
               }
             }
-            console.log(para);
+            console.log(update);
+            this.$store.state.formValidate.formData.push(update)
             this.$message({
               message: "提交成功，请在控制台查看json!！",
               type: 'success'
@@ -433,6 +444,15 @@
 <style>
   .form-section {
     padding: 10px;
-    width: 500px;
+    width: 100%;
+  }
+  .demo-ruleForm {
+    widows: 500px;
+    float: left;
+  }
+  .demo-table {
+    width: 800px!important;
+    float: left;
+    margin-left: 100px;
   }
 </style>

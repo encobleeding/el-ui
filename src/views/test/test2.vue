@@ -1,15 +1,13 @@
 <template>
 <section>
-  <v-tree :fiterID="fiterID"></v-tree>
-  <v-tree2 :fiterID="fiterID2"></v-tree2>
   <v-form></v-form>
-  <v-table></v-table>
+  <v-table class="demo-table"></v-table>
 </section>
 </template>
 
 <script>
-  import newtree from 'src/views/tree/tree.vue';
   import newform from 'src/views/testForm/testForm.vue';
+  import newtable from 'src/views/testForm/testTable.vue';
   export default {
     data () {
       return {
@@ -45,9 +43,8 @@
     },
     methods: {},
     components: {
-      'v-tree': newtree,
-      'v-tree2': newtree,
-      'v-form': newform
+      'v-form': newform,
+      'v-table': newtable
     },
     beforeCreate: function () {
     },
@@ -67,4 +64,12 @@
     }
   };
 </script>
+<style>
+.demo-table {
+    width: 800px!important;
+    float: left;
+    margin-left: 100px;
+  }
+</style>
+
 
